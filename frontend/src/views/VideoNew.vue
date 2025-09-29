@@ -47,7 +47,7 @@
           <div>
             <p class="text-sm font-medium text-primary">小贴士</p>
             <p class="text-xs text-primary/80 mt-1">
-              使用"自动生成"功能可以从B站链接快速填充基本信息
+              使用"自动生成"功能可以从B站链接快速填充基本信息, 合集请添加第1集
             </p>
           </div>
         </div>

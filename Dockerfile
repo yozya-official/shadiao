@@ -5,7 +5,7 @@ FROM node:20-alpine AS frontend-builder
 WORKDIR /frontend
 
 # 接收构建参数
-ARG GITHUB_TOKEN
+ARG GH_TOKEN
 
 # 安装 pnpm
 RUN npm install -g pnpm
@@ -14,7 +14,7 @@ RUN npm install -g pnpm
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
 
 # 配置 GitHub Packages 认证
-RUN echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > .npmrc && \
+RUN echo "//npm.pkg.github.com/:_authToken=${GH_TOKEN}" > .npmrc && \
   echo "@yuelioi:registry=https://npm.pkg.github.com" >> .npmrc
 
 # 安装依赖
