@@ -1,0 +1,61 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_IMAGE_NAME: ghcr.io/${{ github.repository }}:latest
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. 设置 Go
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.22"
+
+      # 3. 设置 Node
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      # 4. 安装前端依赖并构建
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      # 5. 构建 Go 后端
+      - name: Build Go backend
+        run: go build -o server ./main.go
+
+      # 6. 构建 Docker 镜像
+      - name: Build Docker image
+        run: |
+          docker build -t $DOCKER_IMAGE_NAME .
+
+      # 7. 登录 GHCR（可选，如果要推镜像）
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 8. 推送 Docker 镜像（可选）
+      - name: Push Docker image
+        run: docker push $DOCKER_IMAGE_NAME

@@ -1,0 +1,24 @@
+@layer utilities {
+  .input {
+    & {
+      @apply border bg-background rounded-md placeholder-muted-foreground;
+    }
+  }
+
+  .select {
+    & {
+      @apply border bg-background rounded-md placeholder-muted-foreground;
+    }
+  }
+  .textarea {
+    & {
+      @apply border bg-background rounded-md placeholder-muted-foreground;
+    }
+  }
+}
+
+/* 
+theme 的 radius 可以控制 daisyui的radius
+
+
+*/

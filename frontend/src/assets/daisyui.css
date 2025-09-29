@@ -1,0 +1,69 @@
+@plugin "daisyui/theme" {
+  name: 'shadcn-light';
+  default: false;
+  prefersdark: false;
+  color-scheme: 'light';
+  --color-base-100: color-mix(in srgb, var(--background) 93%, var(--primary) 7%);
+  --color-base-200: color-mix(in srgb, var(--background) 96%, var(--primary) 4%);
+  --color-base-300: color-mix(in srgb, var(--background) 99%, var(--primary) 1%);
+
+  --color-base-content: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-content: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-content: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-content: var(--accent-foreground);
+  --color-neutral: var(--foreground);
+  --color-neutral-content: var(--background);
+  --color-info: var(--primary);
+  --color-info-content: var(--primary-foreground);
+  --color-success: var(--secondary);
+  --color-success-content: var(--secondary-foreground);
+  --color-warning: var(--accent);
+  --color-warning-content: var(--accent-foreground);
+  --color-error: var(--destructive);
+  --color-error-content: var(--destructive-foreground);
+  --border: 0.125rem;
+  --depth: 0.25;
+  --size-field: 0.25rem;
+  --size-selector: 0.25rem;
+  --radius-selector: var(--radius-lg);
+  --radius-field: var(--radius-md);
+  --radius-box: var(--radius-lg);
+}
+
+@plugin "daisyui/theme" {
+  name: 'shadcn-dark';
+  default: true;
+  prefersdark: true;
+  color-scheme: 'dark';
+  --color-base-100: color-mix(in srgb, var(--background) 93%, var(--primary) 7%);
+  --color-base-200: color-mix(in srgb, var(--background) 96%, var(--primary) 4%);
+  --color-base-300: color-mix(in srgb, var(--background) 99%, var(--primary) 1%);
+
+  --color-base-content: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-content: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-content: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-content: var(--accent-foreground);
+  --color-neutral: var(--foreground);
+  --color-neutral-content: var(--background);
+  --color-info: var(--primary);
+  --color-info-content: var(--primary-foreground);
+  --color-success: var(--secondary);
+  --color-success-content: var(--secondary-foreground);
+  --color-warning: var(--accent);
+  --color-warning-content: var(--accent-foreground);
+  --color-error: var(--destructive);
+  --color-error-content: var(--destructive-foreground);
+  --border: 0.125rem;
+  --depth: 0.25;
+  --size-field: 0.25rem;
+  --size-selector: 0.25rem;
+  --radius-selector: var(--radius-lg);
+  --radius-field: var(--radius-md);
+  --radius-box: var(--radius-lg);
+}

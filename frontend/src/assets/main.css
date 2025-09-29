@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin "daisyui";
+
+@import './theme.css';
+
+@import './daisyui.css';
+@import './daisyui.override.css';
+@import './base.css';

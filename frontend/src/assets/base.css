@@ -1,0 +1,29 @@
+@layer base {
+  h1 {
+    font-size: var(--text-5xl);
+    font-weight: 700;
+  }
+  h2 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+  }
+  h3 {
+    font-size: var(--text-xl);
+  }
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
