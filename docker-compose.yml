@@ -1,0 +1,13 @@
+services:
+  shadiao:
+    image: ghcr.io/yozya-official/shadiao:latest
+    container_name: shadiao
+    platform: linux/amd64
+    ports:
+      - "9901:9000"
+    volumes:
+      # 挂载数据库
+      - ./data:/app/data
+    environment:
+      # 数据库路径
+      - DATABASE_URL=/app/data/shadiao.db
