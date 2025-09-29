@@ -328,28 +328,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
-/* 自定义滚动条 */
-:deep(*::-webkit-scrollbar) {
-  width: 6px;
-  height: 6px;
-}
-
-:deep(*::-webkit-scrollbar-track) {
-  background: var(--muted);
-  border-radius: calc(var(--radius) / 2);
-}
-
-:deep(*::-webkit-scrollbar-thumb) {
-  background: var(--primary);
-  border-radius: calc(var(--radius) / 2);
-}
-
-:deep(*::-webkit-scrollbar-thumb:hover) {
-  background: var(--primary);
-  opacity: 0.8;
-}
-
+<style scoped lang="css">
 /* Logo 悬停效果 */
 .group:hover .w-10 {
   transform: scale(1.05) rotate(2deg);
