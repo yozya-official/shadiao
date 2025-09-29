@@ -75,7 +75,11 @@
 
         <!-- 作者和日期 -->
         <div class="flex items-center justify-between text-sm">
-          <div v-if="showAuthor" class="flex items-center space-x-2 flex-1 min-w-0">
+          <div
+            v-if="showAuthor"
+            @click="router.push({ name: 'author', params: { authorId: video.author.id } })"
+            class="flex items-center space-x-2 flex-1 min-w-0"
+          >
             <div
               class="w-7 h-7 rounded-full bg-gradient-to-br from-primary/20 to-chart-2/20 p-0.5 flex-shrink-0"
             >
@@ -252,7 +256,11 @@
           <h3 class="text-3xl font-bold text-foreground pr-12">{{ selectedVideo.title }}</h3>
 
           <!-- 作者信息 -->
-          <div v-if="showAuthor" class="flex items-center space-x-3 p-4 bg-muted/20 rounded-xl">
+          <div
+            v-if="showAuthor"
+            class="flex cursor-pointer items-center space-x-3 p-4 bg-muted/20 rounded-xl"
+            @click="goToAuthor(selectedVideo.author.id)"
+          >
             <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-chart-2/20 p-1">
               <img
                 :src="selectedVideo.author.avatar"
@@ -448,6 +456,8 @@ import { backgroundOptions, styleOptions } from '@/stores/options'
 import { formatDate, handleApiError } from '@/utils'
 import { toast } from '@yuelioi/toast'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 import { useVideoStore } from '@/stores/videoStore'
 const videoStore = useVideoStore()
@@ -476,6 +486,11 @@ const visiblePages = computed(() => {
   }
   return pages
 })
+
+const goToAuthor = (id?: number) => {
+  if (!id) return
+  router.push({ name: 'author', params: { authorId: id } })
+}
 
 const openVideo = (video: VideoData) => {
   selectedVideo.value = video

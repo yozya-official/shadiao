@@ -126,7 +126,7 @@
                   <span class="text-destructive text-sm">*</span>
                 </label>
                 <input
-                  v-model="formData.author.uid"
+                  v-model.number="formData.author.uid"
                   type="text"
                   placeholder="输入作者UID..."
                   class="w-full input input-primary"

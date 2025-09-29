@@ -36,7 +36,7 @@
         >
           <div class="p-6 text-center">
             <!-- 头像 -->
-            <div class="mb-4 cursor-pointer" @click="goToAuthor(author.id)">
+            <div class="mb-4 cursor-pointer" @click="goToBiliSpace(author.uid)">
               <div
                 class="w-20 h-20 relative mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/20 p-1 group-hover:from-primary/40 group-hover:to-chart-2/40 transition-all duration-300"
               >
@@ -90,7 +90,7 @@
                 删除作者
               </button>
               <button
-                @click="delAuthorConfirm(author)"
+                @click="goToAuthor(author.id)"
                 class="btn btn-primary rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-md"
               >
                 <a
@@ -260,6 +260,10 @@ const closeModal = () => {
 const goToAuthor = (id?: number) => {
   if (!id) return
   router.push({ name: 'author', params: { authorId: id } })
+}
+
+const goToBiliSpace = (uid?: number) => {
+  window.location.href = `https://space.bilibili.com/${uid}`
 }
 
 onMounted(() => {
