@@ -1,34 +1,37 @@
 export const backgroundOptions: Record<string, string> = {
   古代: '🏛️',
+  近代: '📻',
   现代: '🏢',
   未来: '🚀',
   异世界: '🌌',
-  八九十年代: '📻',
 }
 
 export const styleOptions: Record<string, string> = {
+  搞笑: '🤪',
   智斗: '🧠',
+  悬疑: '🕵️',
   恐怖: '👻',
   恋爱: '🥰',
-  搞笑: '🤪',
-  循环: '🔁',
-  奇幻: '⚔️',
   丧尸: '🧟',
-  校园: '🎓',
-  治愈: '💖',
   后宫: '💌',
   重生: '⏳',
+  循环: '🔁',
   反派: '🦹',
+  女主: '👩‍🦰',
+  其他: '❓',
 }
 
 export const worldOptions: Record<string, string> = {
   修仙: '⚔️',
+  怪谈: '🕯️',
+  历史: '🏺',
+  都市: '🏙️',
   鬼神: '👻',
   异能: '✨',
-  怪谈: '🕯️',
   求生: '🏹',
   末世: '☠️',
-  网游: '🖥️',
+  武侠: '🗡️',
+  其他: '❓',
 }
 
 export const durationOptions = {
@@ -39,7 +42,7 @@ export const durationOptions = {
 }
 export const viewsOptions = {
   10: '<10w',
-  100: '<100w',
-  1000: '<1000w',
+  100: '10~100w',
+  1000: '100~1000w',
   9999: '>1000w',
 }
