@@ -30,7 +30,7 @@ RUN pnpm build
 # ----------------------
 # 后端构建阶段 (Go)
 # ----------------------
-FROM golang:1.22-alpine AS backend-builder
+FROM golang:1.25.1-alpine AS backend-builder
 WORKDIR /app
 
 ENV DATABASE_URL=/app/index.db
