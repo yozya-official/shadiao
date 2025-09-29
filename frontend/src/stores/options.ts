@@ -13,6 +13,8 @@ export const styleOptions: Record<string, string> = {
   恐怖: '👻',
   恋爱: '🥰',
   丧尸: '🧟',
+  热血: '🔥',
+  伤感: '😢',
   后宫: '💌',
   重生: '⏳',
   循环: '🔁',
@@ -31,13 +33,14 @@ export const worldOptions: Record<string, string> = {
   求生: '🏹',
   末世: '☠️',
   武侠: '🗡️',
+  网游: '🎮',
   其他: '❓',
 }
 
 export const durationOptions = {
   30: '<30min',
-  60: '<60min',
-  120: '<120min',
+  60: '30~60min',
+  120: '60~120min',
   999: '>120min',
 }
 export const viewsOptions = {

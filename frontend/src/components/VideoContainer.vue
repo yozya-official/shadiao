@@ -21,6 +21,7 @@
 
         <!-- 删除按钮 -->
         <button
+          v-if="isLogin"
           @click.stop="delVideoConfirm(video)"
           class="absolute z-20 top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 group-hover:opacity-100 hover:bg-destructive hover:scale-110 transition-all duration-200 shadow-lg backdrop-blur-sm"
           title="删除视频"
@@ -60,7 +61,7 @@
       <div class="p-4 space-y-2">
         <!-- 标题 -->
         <h3
-          class="font-bold text-foreground line-clamp-1 group-hover:text-primary transition-colors duration-200"
+          class="font-bold text-lg text-foreground line-clamp-1 group-hover:text-primary transition-colors duration-200"
         >
           <a
             :href="video.url"
@@ -250,10 +251,37 @@
             ></path>
           </svg>
         </button>
+        <!-- 编辑按钮 -->
+        <button
+          v-if="isLogin"
+          @click="router.push({ name: 'videos-update', params: { id: selectedVideo.id } })"
+          class="absolute top-20 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200"
+        >
+          <svg
+            class="size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            >
+              <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path
+                d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"
+              />
+            </g>
+          </svg>
+        </button>
 
         <div class="p-8 space-y-6">
           <!-- 标题 -->
-          <h3 class="text-3xl font-bold text-foreground pr-12">{{ selectedVideo.title }}</h3>
+          <h3 class="text-lg font-bold text-foreground pr-12">{{ selectedVideo.title }}</h3>
 
           <!-- 作者信息 -->
           <div
@@ -377,6 +405,7 @@
               </svg>
               <span>立即观看</span>
             </a>
+
             <button
               @click="closeVideoModal"
               class="px-6 py-3 bg-muted/40 hover:bg-muted/60 text-muted-foreground hover:text-foreground rounded-xl transition-all duration-200 font-medium"
@@ -456,8 +485,14 @@ import { backgroundOptions, styleOptions } from '@/stores/options'
 import { formatDate, handleApiError } from '@/utils'
 import { toast } from '@yuelioi/toast'
 import { computed, ref } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
+
+const authStore = useAuthStore()
+
+const { isLogin } = authStore
 
 import { useVideoStore } from '@/stores/videoStore'
 const videoStore = useVideoStore()

@@ -1,17 +1,18 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 
-import { watch } from 'vue'
+import { watch, computed } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const apiKey = useStorage('apikey', '')
+  const isLogin = computed(() => apiKey.value != '')
 
   function setApiKey(key: string) {
     apiKey.value = key
   }
-  watch(apiKey, () => {})
 
   return {
+    isLogin,
     apiKey,
     setApiKey,
   }

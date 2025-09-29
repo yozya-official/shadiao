@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import VideoNew from '@/views/VideoNew.vue'
 import VideoView from '@/views/VideoView.vue'
 import ReviewedView from '@/views/ReviewedView.vue'
+import VideoUpdate from '@/views/VideoUpdate.vue'
 
 import AuthorsView from '@/views/AuthorsView.vue'
 import AuthorView from '@/views/AuthorView.vue'
@@ -15,6 +16,11 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/videos',
+    },
+    {
+      path: '/videos/:id',
+      name: 'videos-update',
+      component: VideoUpdate,
     },
     {
       path: '/video/new',

@@ -1,4 +1,4 @@
-import type { VideoNewData } from '@/models/video'
+import type { VideoData, VideoNewData } from '@/models/video'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -77,7 +77,7 @@ export const videoApi = {
    * @param {Object} videoData - 更新的视频数据
    * @returns {Promise}
    */
-  updateVideo: (id: string, videoData: VideoNewData) => {
+  updateVideo: (id: string, videoData: VideoData) => {
     return api.put(`/videos/${id}`, videoData)
   },
 

@@ -84,6 +84,7 @@
             <!-- 操作按钮 -->
             <div class="flex justify-center gap-2">
               <button
+                v-if="isLogin"
                 @click="delAuthorConfirm(author)"
                 class="btn btn-error hover:bg-destructive rounded-lg text-sm font-medium transition-all duration-200"
               >
@@ -93,12 +94,7 @@
                 @click="goToAuthor(author.id)"
                 class="btn btn-primary rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-md"
               >
-                <a
-                  :href="`https://space.bilibili.com/${author.uid}`"
-                  target="_blank"
-                  class="flex items-center space-x-1"
-                  >作者主页</a
-                >
+                作者主页
               </button>
             </div>
           </div>
@@ -211,7 +207,10 @@ import { useRouter } from 'vue-router'
 import { authorApi } from '@/api'
 import type { AuthorData } from '@/models/video'
 import { handleApiError } from '@/utils'
+import { useAuthStore } from '@/stores/authStore'
 import { toast } from '@yuelioi/toast'
+
+const { isLogin } = useAuthStore()
 
 const authors = ref<AuthorData[]>([])
 const selectedAuthor = ref<AuthorData | null>(null)

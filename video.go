@@ -120,10 +120,7 @@ func getVideoByID(c *gin.Context) {
 // 更新视频
 func updateVideo(c *gin.Context) {
 	id := c.Param("id")
-	var input struct {
-		Video  Video  `json:"video"`
-		Author Author `json:"author"`
-	}
+	var input Video
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -139,43 +136,27 @@ func updateVideo(c *gin.Context) {
 		return
 	}
 
-	// 确认作者存在或创建
-	var author Author
-	if err := db.Where("uid = ?", input.Author.UID).First(&author).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			author = input.Author
-			if err := db.Create(&author).Error; err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
-			}
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-	}
-
-	video.Title = input.Video.Title
-	video.AID = input.Video.AID
-	video.URL = input.Video.URL
-	video.Cover = input.Video.Cover
-	video.Description = input.Video.Description
-	video.Duration = input.Video.Duration
-	video.Views = input.Video.Views
-	video.IsOriginal = input.Video.IsOriginal
-	video.IsCompleted = input.Video.IsCompleted
-	video.Background = input.Video.Background
-	video.World = input.Video.World
-	video.HasSystem = input.Video.HasSystem
-	video.Ctime = input.Video.Ctime
-	video.AuthorID = author.ID
-	video.Style = input.Video.Style
+	video.Title = input.Title
+	video.AID = input.AID
+	video.URL = input.URL
+	video.Cover = input.Cover
+	video.Description = input.Description
+	video.Duration = input.Duration
+	video.Views = input.Views
+	video.IsOriginal = input.IsOriginal
+	video.IsCompleted = input.IsCompleted
+	video.Background = input.Background
+	video.World = input.World
+	video.HasSystem = input.HasSystem
+	video.Ctime = input.Ctime
+	video.Style = input.Style
 
 	if err := db.Save(&video).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	video.Style = input.Video.Style
+	video.Style = input.Style
 	c.JSON(http.StatusOK, video)
 }
 
