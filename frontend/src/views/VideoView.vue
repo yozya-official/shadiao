@@ -503,6 +503,8 @@ const filteredVideos = computed(() => {
     result = result.filter((video) => video.hasSystem === filters.hasSystem)
   }
 
+  videoContainerRef.value?.resetPage()
+
   return result
 })
 
@@ -516,8 +518,6 @@ const resetFilters = () => {
     isCompleted: null,
     hasSystem: null,
   })
-
-  videoContainerRef.value?.resetPage()
 }
 
 onMounted(async () => {

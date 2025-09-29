@@ -4,4 +4,4 @@ var apiKeys = make(map[string]bool)
 
 const apiKeyFile = "apikey.txt"
 
-var dbPath = "./data/index.db"
+var dbPath = "./data/shadiao.db"
