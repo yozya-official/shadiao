@@ -504,6 +504,14 @@ const showDeleteModal = ref(false)
 const currentPage = ref(1)
 const pageSize = ref(12)
 
+const resetPage = () => {
+  currentPage.value = 1
+}
+
+defineExpose({
+  resetPage,
+})
+
 const props = defineProps<{
   videos: VideoData[]
   showAuthor?: boolean

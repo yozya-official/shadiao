@@ -335,7 +335,11 @@
 
       <!-- 视频结果 -->
       <div v-if="sortedVideos.length" class="relative">
-        <VideoContainer v-model:videos="sortedVideos" :show-author="true"></VideoContainer>
+        <VideoContainer
+          v-model:videos="sortedVideos"
+          :show-author="true"
+          ref="videoContainerRef"
+        ></VideoContainer>
 
         <!-- 装饰性渐变叠加 -->
         <div class="absolute inset-0 pointer-events-none">
@@ -397,6 +401,7 @@ import { storeToRefs } from 'pinia'
 import VideoContainer from '@/components/VideoContainer.vue'
 const videoStore = useVideoStore()
 const { videos } = storeToRefs(videoStore)
+const videoContainerRef = ref<InstanceType<typeof VideoContainer> | null>(null)
 
 interface Filters {
   search: string
@@ -511,6 +516,8 @@ const resetFilters = () => {
     isCompleted: null,
     hasSystem: null,
   })
+
+  videoContainerRef.value?.resetPage()
 }
 
 onMounted(async () => {
