@@ -20,7 +20,7 @@ RUN echo "@yuelioi:registry=https://npm.pkg.github.com" > .npmrc && \
 # 安装依赖
 RUN pnpm install --frozen-lockfile && pnpm store prune
 
-# 清理 .npmrc（安全起见）
+# 清理 .npmrc（有 token）
 RUN rm -f .npmrc
 
 # 复制源码并构建
@@ -49,11 +49,9 @@ COPY . .
 # 复制前端构建产物
 COPY --from=frontend-builder /frontend/dist ./frontend/dist
 
-# 临时查看文件
-RUN ls -R /app
 
 # 编译 Go 后端
-RUN go build -o server main.go
+RUN go build -o server .
 
 # ----------------------
 # 运行阶段
