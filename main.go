@@ -92,5 +92,5 @@ func main() {
 		c.File("./frontend/dist/index.html")
 	})
 
-	r.Run(":9000")
+	r.Run("0.0.0.0:9000")
 }
