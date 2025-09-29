@@ -215,7 +215,7 @@ const { isLogin } = useAuthStore()
 const authors = ref<AuthorData[]>([])
 const selectedAuthor = ref<AuthorData | null>(null)
 const currentPage = ref(1)
-const pageSize = 9
+const pageSize = 12
 
 const router = useRouter()
 
