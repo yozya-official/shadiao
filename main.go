@@ -30,7 +30,7 @@ func main() {
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
 		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization")
 		c.Header("Access-Control-Expose-Headers", "Content-Length")
-		c.Header("Access-Control-Allow-Credentials", "true")
+		// c.Header("Access-Control-Allow-Credentials", "true")
 
 		// 处理预检请求
 		if c.Request.Method == "OPTIONS" {

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"gorm.io/datatypes"
@@ -80,6 +81,11 @@ func initDB() {
 
 	if envPath := os.Getenv("DATABASE_URL"); envPath != "" {
 		dbPath = envPath
+	}
+
+	dir := filepath.Dir(dbPath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		log.Fatal("failed to create database directory:", err)
 	}
 
 	db, err = gorm.Open(sqlite.Open(dbPath+"?_foreign_keys=1"), &gorm.Config{})
