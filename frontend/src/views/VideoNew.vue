@@ -49,9 +49,10 @@
             <p class="text-xs text-primary/80 mt-1">
               使用"自动生成"功能可以从B站链接快速填充基本信息
             </p>
-            <p class="text-xs text-primary/80 mt-1">支持bv av b23短链</p>
-            <p class="text-xs text-primary/80 mt-1">未完结合集请添加第1集</p>
-            <p class="text-xs text-primary/80 mt-1">生成失败可以稍后重试</p>
+            <p class="text-sm text-primary/80 mt-1">支持bv av b23短链</p>
+            <p class="text-sm text-primary/80 mt-1">未完结合集请添加第1集</p>
+            <p class="text-sm text-primary/80 mt-1">生成失败可以稍后重试</p>
+            <p class="text-sm font-bold text-primary/80 mt-1">提交成功会进入审核, 请耐心等待</p>
           </div>
         </div>
       </div>

@@ -150,9 +150,9 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span class="text-sm">世界设定</span>
+              <span>世界设定</span>
             </label>
-            <select v-model="filters.world" class="w-full select input-primary">
+            <select v-model="filters.world" class="w-full select select-primary">
               <option value="">全部世界</option>
               <option v-for="(icon, world) in worldOptions" :key="world" :value="world">
                 {{ icon }} {{ world }}
@@ -172,7 +172,7 @@
               </svg>
               <span>风格</span>
             </label>
-            <select v-model="filters.style" class="w-full select input-primary">
+            <select v-model="filters.style" class="w-full select select-primary">
               <option value="">全部风格</option>
               <option v-for="(icon, style) in styleOptions" :key="style" :value="style">
                 {{ icon }} {{ style }}

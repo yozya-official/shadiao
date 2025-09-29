@@ -228,6 +228,7 @@ const navigationItems = ref([
   { name: '视频', href: '/videos', active: false },
   { name: 'UP主', href: '/authors', active: false },
   { name: '审核', href: '/videos/review', active: false },
+  { name: '交流', href: '/communicate', active: false },
   { name: '提交视频', href: '/video/new', active: false },
 ])
 
