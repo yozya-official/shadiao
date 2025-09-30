@@ -62,8 +62,8 @@
 
       <!-- 右侧功能区 -->
       <div class="flex items-center">
-        <!-- 主题切换器 -->
-        <div class="relative flex gap-3">
+        <!-- 主题切换器+设置 -->
+        <div class="relative flex gap-3 pr-2">
           <ThemeToggle class="hover:scale-105 transition-transform duration-200"></ThemeToggle>
           <button onclick="secret_setting.show()" class="cursor-pointer hover:scale-105">
             <svg

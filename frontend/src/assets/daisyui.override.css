@@ -1,18 +1,15 @@
 @layer utilities {
+  .textarea,
+  .select,
   .input {
     & {
       @apply border bg-background rounded-md placeholder-muted-foreground;
     }
   }
-
-  .select {
+  .input-primary,
+  .select-primary {
     & {
-      @apply border bg-background rounded-md placeholder-muted-foreground;
-    }
-  }
-  .textarea {
-    & {
-      @apply border bg-background rounded-md placeholder-muted-foreground;
+      @apply border-primary/30;
     }
   }
 }
