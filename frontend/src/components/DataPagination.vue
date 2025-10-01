@@ -7,6 +7,7 @@
         :disabled="currentPage === 1"
         class="px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
         :class="{ 'hover:bg-transparent': currentPage === 1 }"
+        aria-label="上一页"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -41,6 +42,7 @@
         :disabled="currentPage === totalPages"
         class="px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
         :class="{ 'hover:bg-transparent': currentPage === totalPages }"
+        aria-label="下一页"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

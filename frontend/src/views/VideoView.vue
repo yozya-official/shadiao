@@ -89,7 +89,7 @@
 
         <!-- 背景设定筛选 -->
         <div class="space-y-2">
-          <label class="flex items-center space-x-2 font-semibold">
+          <label for="background" class="flex items-center space-x-2 font-semibold">
             <svg class="size-4 text-chart-2" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fill-rule="evenodd"
@@ -99,7 +99,7 @@
             </svg>
             <span>背景设定</span>
           </label>
-          <select v-model="filters.background" class="w-full select input-primary">
+          <select id="background" v-model="filters.background" class="w-full select input-primary">
             <option value="">全部背景</option>
             <option
               v-for="(icon, background) in backgroundOptions"
@@ -113,7 +113,7 @@
 
         <!-- 世界筛选 -->
         <div class="space-y-2">
-          <label class="flex items-center space-x-2 font-semibold">
+          <label for="world" class="flex items-center space-x-2 font-semibold">
             <svg class="size-4 text-chart-3" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fill-rule="evenodd"
@@ -123,7 +123,7 @@
             </svg>
             <span>世界设定</span>
           </label>
-          <select v-model="filters.world" class="w-full select select-primary">
+          <select id="world" v-model="filters.world" class="w-full select select-primary">
             <option value="">全部世界</option>
             <option v-for="(icon, world) in worldOptions" :key="world" :value="world">
               {{ icon }} {{ world }}
@@ -133,7 +133,7 @@
 
         <!-- 风格筛选 -->
         <div class="space-y-2">
-          <label class="flex items-center space-x-2 font-semibold">
+          <label for="style" class="flex items-center space-x-2 font-semibold">
             <svg class="size-4 text-chart-4" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fill-rule="evenodd"
@@ -143,7 +143,7 @@
             </svg>
             <span>风格</span>
           </label>
-          <select v-model="filters.style" class="w-full select select-primary">
+          <select id="style" v-model="filters.style" class="w-full select select-primary">
             <option value="">全部风格</option>
             <option v-for="(icon, style) in styleOptions" :key="style" :value="style">
               {{ icon }} {{ style }}
@@ -250,7 +250,7 @@
       </div>
 
       <div class="flex items-center space-x-3">
-        <select v-model="sortBy" class="px-4 select pr-8 py-2 input-primary">
+        <select v-model="sortBy" class="px-4 select pr-8 py-2 input-primary" aria-label="排序方式">
           <option value="name">按名称排序</option>
           <option value="author">按作者排序</option>
           <option value="created">按创建时间</option>

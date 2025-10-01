@@ -15,7 +15,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/videos',
+      name: 'videos',
+      component: VideoView,
     },
     {
       path: '/videos/:id',
@@ -27,11 +28,7 @@ const router = createRouter({
       name: 'video-new',
       component: VideoNew,
     },
-    {
-      path: '/videos',
-      name: 'videos',
-      component: VideoView,
-    },
+
     {
       path: '/videos/review',
       name: 'videos-review',

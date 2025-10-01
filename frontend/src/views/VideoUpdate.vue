@@ -145,6 +145,7 @@
                 @click.stop="formData.cover = ''"
                 class="absolute z-20 top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 group-hover:opacity-100 hover:bg-destructive hover:scale-110 transition-all duration-200 shadow-lg backdrop-blur-sm"
                 title="删除封面"
+                aria-label="删除封面"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -505,7 +506,7 @@ onMounted(async () => {
   console.log(route)
   if (!videoId) {
     toast.error('视频ID不存在')
-    router.push('/videos')
+    router.push('/')
     return
   }
 
@@ -514,7 +515,7 @@ onMounted(async () => {
     Object.assign(formData, response.data)
   } catch (error: unknown) {
     handleApiError(error, '加载')
-    router.push('/videos')
+    router.push('/')
   }
 })
 
@@ -530,7 +531,7 @@ const handleUpdate = async () => {
   try {
     await videoApi.updateVideo(videoId, formData)
     toast.success('视频更新成功！')
-    router.push('/videos')
+    router.push('/')
   } catch (error: unknown) {
     handleApiError(error, '更新')
   }

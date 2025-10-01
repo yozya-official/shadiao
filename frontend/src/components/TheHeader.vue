@@ -7,6 +7,7 @@
       <div class="flex items-center space-x-3">
         <a
           href="/"
+          aria-label="首页"
           class="group flex items-center space-x-3 transition-all duration-200 hover:opacity-90"
         >
           <div class="relative">
@@ -226,7 +227,7 @@ defineProps(['siteTitle'])
 const secretModal = ref<HTMLDialogElement>()
 
 const navigationItems = ref([
-  { name: '视频', path: '/videos', active: false },
+  { name: '视频', path: '/', active: false },
   { name: 'UP主', path: '/authors', active: false },
   { name: '审核', path: '/videos/review', active: false },
   { name: '交流', path: '/communicate', active: false },
@@ -240,8 +241,8 @@ const navigateTo = (path: string) => {
 }
 
 const isActive = (path: string) => {
-  if (path === '/videos') {
-    return route.path === '/videos'
+  if (path === '/') {
+    return route.path === '/'
   }
   return route.path.startsWith(path)
 }

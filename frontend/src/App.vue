@@ -10,7 +10,7 @@ import '@yuelioi/toast/dist/toast.css'
 
 <template>
   <ToastContainer />
-  <TheHeader />
+  <TheHeader site-title="沙雕动画收集站" />
 
   <RouterView v-slot="{ Component }">
     <keep-alive>

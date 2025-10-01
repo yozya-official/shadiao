@@ -25,6 +25,7 @@
           @click.stop="delVideoConfirm(video)"
           class="absolute z-20 top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 group-hover:opacity-100 hover:bg-destructive hover:scale-110 transition-all duration-200 shadow-lg backdrop-blur-sm"
           title="删除视频"
+          aria-label="删除视频"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -203,8 +204,9 @@
         <!-- 编辑按钮 -->
         <button
           v-if="isLogin"
-          @click="router.push({ name: 'videos-update', params: { id: selectedVideo.id } })"
+          @click="goToEdit"
           class="absolute top-20 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200"
+          aria-label="编辑视频"
         >
           <svg
             class="size-4"
@@ -458,6 +460,11 @@ defineProps<{
 const goToAuthor = (id?: number) => {
   if (!id) return
   router.push({ name: 'author', params: { authorId: id } })
+}
+
+const goToEdit = () => {
+  closeVideoModal()
+  router.push({ name: 'videos-update', params: { id: selectedVideo.value?.id } })
 }
 
 const openVideo = (video: VideoData) => {
