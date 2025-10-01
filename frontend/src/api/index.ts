@@ -31,11 +31,9 @@ api.interceptors.request.use(
 // 响应拦截器
 api.interceptors.response.use(
   (response) => {
-    // 对响应数据做点什么
     return response
   },
   (error) => {
-    // 对响应错误做点什么
     console.error('API Error:', error.response?.data || error.message)
     return Promise.reject(error)
   },
