@@ -572,12 +572,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-
 import { toast } from '@yuelioi/toast'
-import type { VideoNewData } from '@/models/video'
-import { videoApi } from '@/api'
-import { handleApiError } from '@/utils'
 
 import {
   backgroundOptions,
@@ -586,7 +581,6 @@ import {
   viewsOptions,
   worldOptions,
 } from '@/stores/options'
-import PageHeader from '@/components/PageHeader.vue'
 
 const formData = reactive<VideoNewData>({
   author: {

@@ -186,15 +186,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { authorApi } from '@/api'
-import type { AuthorData } from '@/models/video'
-import { handleApiError } from '@/utils'
-import { useAuthStore } from '@/stores/authStore'
 import { toast } from '@yuelioi/toast'
-
-import PageHeader from '@/components/PageHeader.vue'
 
 const { isLogin } = useAuthStore()
 

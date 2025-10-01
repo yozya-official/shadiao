@@ -12,7 +12,11 @@ import '@yuelioi/toast/dist/toast.css'
   <ToastContainer />
   <TheHeader />
 
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </RouterView>
 
   <TheFooter />
 </template>

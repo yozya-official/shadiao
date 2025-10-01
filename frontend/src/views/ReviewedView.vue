@@ -289,14 +289,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { videoApi } from '@/api/'
-import type { VideoData } from '@/models/video'
-
 import { backgroundOptions, styleOptions, worldOptions } from '@/stores/options'
-import { handleApiError } from '@/utils'
 import { toast } from '@yuelioi/toast'
-import PageHeader from '@/components/PageHeader.vue'
 
 const videos = ref<VideoData[]>([])
 

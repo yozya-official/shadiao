@@ -87,13 +87,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { authorApi } from '@/api/'
-import type { AuthorData } from '@/models/video'
-import VideoContainer from '@/components/VideoContainer.vue'
-import PageHeader from '@/components/PageHeader.vue'
-
 const route = useRoute()
 const authorId = route.params.authorId as string
 

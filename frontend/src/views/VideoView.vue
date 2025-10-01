@@ -8,7 +8,7 @@
       </svg>
     </template>
   </PageHeader>
-  <div class="container mx-auto px-6 py-8 max-w-6xl relative">
+  <div class="container mx-auto px-6 py-8 max-w-6xl relative ff">
     <!-- 筛选器区域 -->
     <div
       v-if="showFilter"
@@ -248,6 +248,7 @@
         <span class="font-bold text-primary text-2xl">{{ filteredVideos.length }}</span>
         部精彩作品
       </div>
+
       <div class="flex items-center space-x-3">
         <select v-model="sortBy" class="px-4 select pr-8 py-2 input-primary">
           <option value="name">按名称排序</option>
@@ -305,12 +306,18 @@
     </div>
 
     <!-- 视频结果 -->
-    <div v-if="sortedVideos.length" class="relative">
+    <div v-if="filteredVideos.length" class="relative">
       <VideoContainer
-        v-model:videos="sortedVideos"
+        v-model:videos="pagedVideos"
         :show-author="true"
         ref="videoContainerRef"
       ></VideoContainer>
+
+      <DataPagination
+        v-model:total="filteredVideos.length"
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+      ></DataPagination>
 
       <!-- 装饰性渐变叠加 -->
       <div class="absolute inset-0 pointer-events-none">
@@ -359,41 +366,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
-
-import { backgroundOptions, styleOptions, worldOptions } from '@/stores/options'
-import { useVideoStore } from '@/stores/videoStore'
-import { storeToRefs } from 'pinia'
 import VideoContainer from '@/components/VideoContainer.vue'
-import PageHeader from '@/components/PageHeader.vue'
+import { backgroundOptions, styleOptions, worldOptions } from '@/stores/options'
+
 const videoStore = useVideoStore()
+const filterStore = useFilterStore()
 const { videos } = storeToRefs(videoStore)
+const { filters, showFilter, sortBy, sortOrder, currentPage } = storeToRefs(filterStore)
+const { resetFilters } = filterStore
 const videoContainerRef = ref<InstanceType<typeof VideoContainer> | null>(null)
 
-interface Filters {
-  search: string
-  background: string
-  style: string
-  world: string
-  isOriginal: boolean | null
-  isCompleted: boolean | null
-  hasSystem: boolean | null
-}
-
-const showFilter = ref(true)
-
-const sortBy = ref<'name' | 'author' | 'created'>('name')
-const sortOrder = ref<'asc' | 'desc'>('asc')
-
-const filters = reactive<Filters>({
-  search: '',
-  background: '',
-  style: '',
-  world: '',
-  isOriginal: null,
-  isCompleted: null,
-  hasSystem: null,
-})
+const pageSize = ref(12)
 
 const sortedVideos = computed(() => {
   const result = [...filteredVideos.value]
@@ -429,63 +412,54 @@ const sortedVideos = computed(() => {
   return result
 })
 
-// 计算属性
-const filteredVideos = computed(() => {
-  let result = videos.value
+const filteredVideos = ref<VideoData[]>([])
 
-  // 搜索筛选
-  if (filters.search) {
-    const search = filters.search.toLowerCase()
-    result = result.filter(
-      (video) =>
-        video.title.toLowerCase().includes(search) ||
-        video.author?.name.toLowerCase().includes(search),
-    )
-  }
+watch(
+  () => ({
+    ...filters.value,
+    sortBy: sortBy.value,
+    sortOrder: sortOrder.value,
+    videos: videos.value,
+  }),
+  () => {
+    currentPage.value = 1
 
-  // 背景设定筛选
-  if (filters.background) {
-    result = result.filter((video) => video.background === filters.background)
-  }
+    let result = [...videos.value]
 
-  // 风格筛选
-  if (filters.style) {
-    result = result.filter((video) => video.style.includes(filters.style))
-  }
-  // 世界筛选
-  if (filters.world) {
-    result = result.filter((video) => video.world.includes(filters.world))
-  }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filterRules: [keyof Filters, (video: VideoData, value: any) => boolean][] = [
+      [
+        'search',
+        (video, value) =>
+          video.title.toLowerCase().includes(value.toLowerCase()) ||
+          video.author?.name.toLowerCase().includes(value.toLowerCase()),
+      ],
+      ['background', (video, value) => video.background === value],
+      ['style', (video, value) => video.style.includes(value)],
+      ['world', (video, value) => video.world.includes(value)],
+      ['isOriginal', (video, value) => value === null || video.isOriginal === value],
+      ['isCompleted', (video, value) => value === null || video.isCompleted === value],
+      ['hasSystem', (video, value) => value === null || video.hasSystem === value],
+    ]
 
-  // 状态筛选
-  if (filters.isOriginal !== null) {
-    result = result.filter((video) => video.isOriginal === filters.isOriginal)
-  }
+    // 循环应用筛选
+    for (const [key, fn] of filterRules) {
+      const value = filters.value[key]
+      if (value !== null && value !== '') {
+        result = result.filter((video) => fn(video, value))
+      }
+    }
 
-  if (filters.isCompleted !== null) {
-    result = result.filter((video) => video.isCompleted === filters.isCompleted)
-  }
+    filteredVideos.value = result
+  },
+  { deep: true, immediate: true },
+)
 
-  if (filters.hasSystem !== null) {
-    result = result.filter((video) => video.hasSystem === filters.hasSystem)
-  }
-
-  videoContainerRef.value?.resetPage()
-
-  return result
+const pagedVideos = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  const end = currentPage.value * pageSize.value
+  return sortedVideos.value.slice(start, end)
 })
-
-const resetFilters = () => {
-  Object.assign(filters, {
-    search: '',
-    background: '',
-    style: '',
-    world: '',
-    isOriginal: null,
-    isCompleted: null,
-    hasSystem: null,
-  })
-}
 
 onMounted(async () => {
   await videoStore.loadVideos()
@@ -493,27 +467,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* 自定义滚动条 */
-:deep(*::-webkit-scrollbar) {
-  width: 6px;
-  height: 6px;
-}
-
-:deep(*::-webkit-scrollbar-track) {
-  background: var(--muted);
-  border-radius: calc(var(--radius) / 2);
-}
-
-:deep(*::-webkit-scrollbar-thumb) {
-  background: var(--primary);
-  border-radius: calc(var(--radius) / 2);
-}
-
-:deep(*::-webkit-scrollbar-thumb:hover) {
-  background: var(--primary);
-  opacity: 0.8;
-}
-
 /* 过滤器不为null 且 为false时 */
 .no-checked {
   position: relative;
@@ -538,23 +491,6 @@ onMounted(async () => {
   background: var(--background);
   border: 2px solid var(--destructive);
   border-radius: 4px;
-}
-
-/* 文字渐变效果 */
-.bg-clip-text {
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-/* 卡片悬停效果 */
-.bg-card:hover {
-  transform: translateY(-2px);
-}
-
-/* 输入框和选择框统一样式 */
-input:focus,
-select:focus {
-  box-shadow: 0 0 0 3px var(--primary-rgb, 84 114 183) / 0.1;
 }
 
 /* 状态筛选卡片悬停效果 */

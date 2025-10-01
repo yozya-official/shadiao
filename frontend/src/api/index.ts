@@ -1,4 +1,3 @@
-import type { VideoData, VideoNewData } from '@/models/video'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 

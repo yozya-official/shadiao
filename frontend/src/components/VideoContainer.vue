@@ -2,7 +2,7 @@
   <!-- 视频内容网格 -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     <div
-      v-for="video in filteredVideos"
+      v-for="video in videos"
       :key="video.id"
       class="group relative bg-card border border-border rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2 cursor-pointer"
     >
@@ -166,57 +166,6 @@
   </div>
 
   <!-- 分页控制 -->
-  <div v-if="props.videos.length > pageSize" class="flex justify-center mt-12">
-    <div class="flex items-center space-x-2 bg-card border border-border rounded-xl p-2 shadow-sm">
-      <button
-        @click="currentPage = Math.max(1, currentPage - 1)"
-        :disabled="currentPage === 1"
-        class="px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-        :class="{ 'hover:bg-transparent': currentPage === 1 }"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          ></path>
-        </svg>
-      </button>
-
-      <div class="flex items-center space-x-1">
-        <button
-          v-for="page in visiblePages"
-          :key="page"
-          @click="currentPage = page"
-          class="min-w-[2.5rem] px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200"
-          :class="
-            currentPage === page
-              ? 'bg-primary text-primary-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-          "
-        >
-          {{ page }}
-        </button>
-      </div>
-
-      <button
-        @click="currentPage = Math.min(totalPages, currentPage + 1)"
-        :disabled="currentPage === totalPages"
-        class="px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-        :class="{ 'hover:bg-transparent': currentPage === totalPages }"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          ></path>
-        </svg>
-      </button>
-    </div>
-  </div>
 
   <!-- 视频详情模态框 -->
   <Transition
@@ -480,11 +429,11 @@
 
 <script setup lang="ts">
 import { videoApi } from '@/api'
-import type { VideoData } from '@/models/video'
+import type { VideoData } from '@/models'
 import { backgroundOptions, styleOptions } from '@/stores/options'
 import { formatDate, handleApiError } from '@/utils'
 import { toast } from '@yuelioi/toast'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
 
@@ -501,34 +450,10 @@ const selectedVideo = ref<VideoData | null>(null)
 const showVideoModal = ref(false)
 const showDeleteModal = ref(false)
 
-const currentPage = ref(1)
-const pageSize = ref(12)
-
-const resetPage = () => {
-  currentPage.value = 1
-}
-
-defineExpose({
-  resetPage,
-})
-
-const props = defineProps<{
+defineProps<{
   videos: VideoData[]
   showAuthor?: boolean
 }>()
-
-const totalPages = computed(() => Math.ceil(props.videos.length / pageSize.value))
-
-const visiblePages = computed(() => {
-  const pages = []
-  const start = Math.max(1, currentPage.value - 2)
-  const end = Math.min(totalPages.value, start + 4)
-
-  for (let i = start; i <= end; i++) {
-    pages.push(i)
-  }
-  return pages
-})
 
 const goToAuthor = (id?: number) => {
   if (!id) return
@@ -570,12 +495,6 @@ const delVideo = async () => {
     handleApiError(error, '删除')
   }
 }
-
-const filteredVideos = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  return props.videos.slice(start, end)
-})
 </script>
 
 <style scoped>

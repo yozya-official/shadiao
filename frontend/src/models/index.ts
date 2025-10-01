@@ -29,3 +29,13 @@ export interface VideoNewData {
   video: VideoData
   author: AuthorData
 }
+
+export interface Filters {
+  search: string
+  background: string
+  style: string
+  world: string
+  isOriginal: boolean | null
+  isCompleted: boolean | null
+  hasSystem: boolean | null
+}

@@ -64,12 +64,12 @@
         </div>
 
         <!-- 加群按钮 -->
-        <div class="space-y-4">
+        <div class="space-y-4 [&>div]:hover:translate-x-4">
           <a
             href="https://qm.qq.com/q/ajK30VmEPm"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-primary to-chart-2 text-primary-foreground rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg space-x-3 group"
+            class="inline-flex hover:-translate-y-1 items-center justify-center px-8 py-4 bg-gradient-to-r from-primary to-chart-2 text-primary-foreground rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg space-x-3 group"
           >
             <svg
               class="w-6 h-6 group-hover:scale-110 transition-transform duration-200"
@@ -112,7 +112,7 @@
         <h2 class="text-2xl font-bold text-foreground">社区公约</h2>
       </div>
 
-      <div class="space-y-4">
+      <div class="space-y-4 [&>div]:transition-transform [&>div]:hover:translate-x-2">
         <div
           class="flex items-start space-x-4 p-4 bg-muted/20 rounded-xl hover:bg-muted/30 transition-colors duration-200"
         >
@@ -172,53 +172,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import PageHeader from '@/components/PageHeader.vue'
-
-// 无需额外逻辑，纯展示页面
-</script>
-
-<style scoped>
-/* 自定义滚动条 */
-:deep(*::-webkit-scrollbar) {
-  width: 6px;
-  height: 6px;
-}
-
-:deep(*::-webkit-scrollbar-track) {
-  background: var(--muted);
-  border-radius: calc(var(--radius) / 2);
-}
-
-:deep(*::-webkit-scrollbar-thumb) {
-  background: var(--primary);
-  border-radius: calc(var(--radius) / 2);
-}
-
-:deep(*::-webkit-scrollbar-thumb:hover) {
-  background: var(--primary);
-  opacity: 0.8;
-}
-
-/* 文字渐变效果 */
-.bg-clip-text {
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-/* 卡片悬停效果 */
-.bg-card:hover {
-  transform: translateY(-2px);
-}
-
-/* 按钮悬停动画 */
-a:hover {
-  transform: translateY(-2px);
-}
-
-/* 规则项悬停效果 */
-.space-y-4 > div:hover {
-  transform: translateX(4px);
-}
-</style>

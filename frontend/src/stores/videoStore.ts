@@ -1,8 +1,7 @@
-// stores/videoStore.ts
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { videoApi } from '@/api/index'
-import type { VideoData } from '@/models/video'
+import type { VideoData, Filters } from '@/models'
 
 export const useVideoStore = defineStore('video', () => {
   const videos = ref<VideoData[]>([])

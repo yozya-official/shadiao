@@ -48,6 +48,8 @@
     "prettier": "3.6.2",
     "tailwindcss": "^4.1.13",
     "typescript": "~5.8.0",
+    "unplugin-auto-import": "^20.2.0",
+    "unplugin-vue-components": "^29.1.0",
     "vite": "npm:rolldown-vite@latest",
     "vite-plugin-vue-devtools": "^8.0.0",
     "vue-tsc": "^3.0.4"

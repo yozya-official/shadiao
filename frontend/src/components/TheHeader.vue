@@ -37,15 +37,16 @@
       </div>
 
       <!-- 桌面端导航 -->
+      <!-- 桌面端导航 -->
       <nav class="hidden items-center md:flex">
         <div class="flex items-center space-x-1 bg-muted rounded-full p-1">
-          <a
+          <button
             v-for="item in navigationItems"
             :key="item.name"
-            :href="item.href"
+            @click="navigateTo(item.path)"
             class="relative px-4 py-2 text-sm font-medium transition-all duration-200 rounded-full"
             :class="[
-              item.active
+              isActive(item.path)
                 ? 'text-primary-foreground bg-primary shadow-sm'
                 : 'text-muted-foreground hover:text-foreground hover:bg-background/60',
             ]"
@@ -53,10 +54,10 @@
             {{ item.name }}
             <!-- 活跃状态指示器 -->
             <div
-              v-if="item.active"
+              v-if="isActive(item.path)"
               class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary-foreground rounded-full translate-y-1"
             ></div>
-          </a>
+          </button>
         </div>
       </nav>
 
@@ -148,17 +149,16 @@
       <div class="container mx-auto max-w-screen-2xl px-6 py-6">
         <!-- 移动端导航 -->
         <nav class="space-y-2">
-          <a
+          <button
             v-for="item in navigationItems"
             :key="item.name"
-            :href="item.href"
-            class="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200"
+            @click="navigateTo(item.path)"
+            class="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 w-full text-left"
             :class="[
-              item.active
+              isActive(item.path)
                 ? 'text-primary bg-primary/10 border border-primary/20'
                 : 'text-foreground hover:text-primary hover:bg-accent/50 border border-transparent hover:border-border/50',
             ]"
-            @click="closeMobileMenu"
           >
             <span>{{ item.name }}</span>
             <!-- 箭头图标 -->
@@ -175,7 +175,7 @@
                 d="M9 5l7 7-7 7"
               ></path>
             </svg>
-          </a>
+          </button>
         </nav>
 
         <!-- 移动端底部装饰 -->
@@ -208,7 +208,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import ThemeToggle from '@yuelioi/components/theme-toggle'
 import '@yuelioi/components/theme-toggle.css'
 import logo from '/logo.png'
@@ -216,6 +216,7 @@ import { useRoute } from 'vue-router'
 
 import { useAuthStore } from '@/stores/authStore'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 
 const store = useAuthStore()
 const { apiKey } = storeToRefs(store)
@@ -225,25 +226,25 @@ defineProps(['siteTitle'])
 const secretModal = ref<HTMLDialogElement>()
 
 const navigationItems = ref([
-  { name: '视频', href: '/videos', active: false },
-  { name: 'UP主', href: '/authors', active: false },
-  { name: '审核', href: '/videos/review', active: false },
-  { name: '交流', href: '/communicate', active: false },
-  { name: '提交视频', href: '/video/new', active: false },
+  { name: '视频', path: '/videos', active: false },
+  { name: 'UP主', path: '/authors', active: false },
+  { name: '审核', path: '/videos/review', active: false },
+  { name: '交流', path: '/communicate', active: false },
+  { name: '提交视频', path: '/video/new', active: false },
 ])
 
 const route = useRoute()
 
-// 监听路由变化，更新 active 状态
-watch(
-  () => route.path,
-  (newPath) => {
-    navigationItems.value.forEach((item) => {
-      item.active = item.href === newPath
-    })
-  },
-  { immediate: true }, // 立即执行一次，初始化状态
-)
+const navigateTo = (path: string) => {
+  router.push(path)
+}
+
+const isActive = (path: string) => {
+  if (path === '/videos') {
+    return route.path === '/videos'
+  }
+  return route.path.startsWith(path)
+}
 
 // 移动端菜单开关
 const mobileMenuOpen = ref(false)
