@@ -30,7 +30,3 @@ coverage
 *.tsbuildinfo
 
 
-# auto imports
-auto-imports.d.ts
-components.d.ts
-.eslintrc-auto-import.json
