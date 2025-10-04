@@ -653,7 +653,7 @@ const handleAutoFill = async () => {
 
     toast.success('自动填充成功！')
   } catch (err: unknown) {
-    handleApiError(err)
+    handleApiError(err, '自动填充失败')
   }
 }
 

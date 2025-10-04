@@ -426,20 +426,23 @@ watch(
 
     let result = [...videos.value]
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const filterRules: [keyof Filters, (video: VideoData, value: any) => boolean][] = [
+    const filterRules: [keyof Filters, (video: VideoData, value: unknown) => boolean][] = [
       [
         'search',
-        (video, value) =>
-          video.title.toLowerCase().includes(value.toLowerCase()) ||
-          video.author?.name.toLowerCase().includes(value.toLowerCase()),
+        (video, value: unknown) => {
+          const v = value as string
+          return (
+            video.title.toLowerCase().includes(v.toLowerCase()) ||
+            video.author?.name.toLowerCase().includes(v.toLowerCase())
+          )
+        },
       ],
-      ['background', (video, value) => video.background === value],
-      ['style', (video, value) => video.style.includes(value)],
-      ['world', (video, value) => video.world.includes(value)],
-      ['isOriginal', (video, value) => value === null || video.isOriginal === value],
-      ['isCompleted', (video, value) => value === null || video.isCompleted === value],
-      ['hasSystem', (video, value) => value === null || video.hasSystem === value],
+      ['background', (video, value: unknown) => video.background === value],
+      ['style', (video, value: unknown) => video.style.includes(value as string)],
+      ['world', (video, value: unknown) => video.world.includes(value as string)],
+      ['isOriginal', (video, value: unknown) => value === null || video.isOriginal === value],
+      ['isCompleted', (video, value: unknown) => value === null || video.isCompleted === value],
+      ['hasSystem', (video, value: unknown) => value === null || video.hasSystem === value],
     ]
 
     // 循环应用筛选
