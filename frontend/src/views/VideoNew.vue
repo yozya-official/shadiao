@@ -12,28 +12,68 @@
 
   <div class="container mx-auto px-6 py-8 max-w-6xl relative">
     <!-- 提示信息 -->
-    <div class="bg-primary/5 border border-primary/20 rounded-xl p-3 mb-8">
-      <div class="flex items-start space-x-3">
-        <svg
-          class="w-5 h-5 text-primary flex-shrink-0 mt-0.5"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-        <div>
-          <p class="text-sm font-medium text-primary">小贴士</p>
-          <p class="text-sm text-primary/80 mt-1">
-            使用"自动生成"功能可以从B站链接快速填充基本信息
+    <div class="card bg-card rounded-2xl p-5 mb-8 shadow">
+      <div class="flex items-center space-x-2 mb-4">
+        <div class="p-1.5 bg-gradient-to-br from-primary to-chart-2 rounded-lg shadow-sm">
+          <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold bg-gradient-to-r text-primary bg-clip-text">使用提示</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="card border backdrop-blur-sm rounded-xl p-4 space-y-2">
+          <div class="flex items-center space-x-2 mb-2">
+            <svg
+              class="w-4 h-4 text-amber-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            <span class="text-sm font-semibold text-gray-600 uppercase tracking-wide"
+              >快速开始</span
+            >
+          </div>
+          <p class="text-sm">先输入<span class="font-semibold text-primary">作品链接</span></p>
+          <p class="text-sm">
+            接着使用 <span class="font-semibold text-primary">"自动生成"</span> 快速填充信息
           </p>
-          <p class="text-sm text-primary/80 mt-1">支持bv av b23短链</p>
-          <p class="text-sm text-primary/80 mt-1">未完结请添加第1集</p>
-          <p class="text-sm text-primary/80 mt-1">生成失败可以稍后重试</p>
-          <p class="text-sm font-bold text-primary/80 mt-1">提交成功会进入审核, 请耐心等待</p>
+          <p class="text-xs">支持 BV号 · av号 · b23.tv短链</p>
+        </div>
+
+        <div class="bg-card card border-1 backdrop-blur-sm rounded-xl p-4 space-y-2">
+          <div class="flex items-center space-x-2 mb-2">
+            <svg
+              class="w-4 h-4 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span class="text-sm font-semibold uppercase tracking-wide">投稿须知</span>
+          </div>
+          <p class="text-sm">
+            未完结作品请添加 <span class="font-semibold text-primary">第1集</span> (帮作者引引流)
+          </p>
+          <p class="text-sm">提交后会进入审核</p>
         </div>
       </div>
     </div>

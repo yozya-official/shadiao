@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -131,14 +130,33 @@ func httpGet(url string) ([]byte, error) {
 	return io.ReadAll(resp.Body)
 }
 
-// 提取 AV 号
-func extractAid(url string) string {
-	// 匹配 av 号
-	re := regexp.MustCompile(`av(\d+)`)
-	if matches := re.FindStringSubmatch(url); len(matches) > 1 {
-		return matches[1]
+func getAVID(rawURL string) (string, error) {
+	realURL := rawURL
+
+	// 处理短链 b23.tv
+	b23Re := regexp.MustCompile(`https?://b23\.tv/[^\s]+`)
+	if match := b23Re.FindString(rawURL); match != "" {
+		resolved, err := resolveShortURL(match)
+		if err != nil {
+			return "", fmt.Errorf("解析短链失败: %w", err)
+		}
+		realURL = resolved
 	}
-	return ""
+
+	// 尝试匹配 AV 号
+	avRe := regexp.MustCompile(`av(\d+)`)
+	if matches := avRe.FindStringSubmatch(realURL); len(matches) > 1 {
+		return matches[1], nil
+	}
+
+	// 尝试匹配 BV 号并转换为 AV 号
+	bvRe := regexp.MustCompile(`BV[0-9A-Za-z]+`)
+	if matches := bvRe.FindStringSubmatch(realURL); len(matches) > 0 {
+		avid := bvid2Avid(matches[0])
+		return fmt.Sprintf("%d", avid), nil
+	}
+
+	return "", fmt.Errorf("无法从 URL 中提取视频 AV 号")
 }
 
 // 解析短链
@@ -276,24 +294,8 @@ func parseVideoURL(c *gin.Context) {
 		return
 	}
 
-	var realURL = url
-
-	// 处理短链
-	if strings.Contains(url, "b23.tv") {
-		resolved, err := resolveShortURL(url)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "解析短链失败", "detail": err.Error()})
-			return
-		}
-		realURL = resolved
-	} else if strings.Contains(url, "www.bilibili.com/video/BV") {
-		// 转换bv号
-		realURL = ConvertBvUrlToAv(url)
-	}
-
-	// 提取 AV 号
-	aid := extractAid(realURL)
-	if aid == "" {
+	aid, err := getAVID(url)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "无法从 URL 中提取视频 ID"})
 		return
 	}

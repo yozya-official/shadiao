@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"net/url"
-	"regexp"
 	"strings"
 )
 
@@ -30,39 +27,4 @@ func bvid2Avid(bvid string) (avid int64) {
 	}
 	avid = (temp & MAX_CODE) ^ XOR_CODE
 	return
-}
-
-// convertBvUrlToAv 把包含 BV 号的链接转成 AV 链接
-func ConvertBvUrlToAv(url string) string {
-	re := regexp.MustCompile(`BV[0-9A-Za-z]+`)
-	match := re.FindString(url)
-	if match == "" {
-		return url
-	}
-	bvid := match
-	avid := bvid2Avid(bvid)
-
-	baseUrl := strings.Split(url, "?")[0]
-	baseUrl = strings.Replace(baseUrl, bvid, fmt.Sprintf("av%d", avid), 1)
-	return baseUrl
-}
-
-func CleanBilibiliURL(raw string) string {
-	u, err := url.Parse(raw)
-	if err != nil {
-		return raw // 解析失败就返回原始的
-	}
-
-	cleanURL := u.Scheme + "://" + u.Host + u.Path
-
-	// 如果有必要，可以只保留 "p" 参数（分P时有用）
-	query := u.Query()
-	if p := query.Get("p"); p != "" {
-		cleanURL = cleanURL + "?p=" + p
-	}
-
-	// 去掉结尾的 "/"
-	cleanURL = strings.TrimSuffix(cleanURL, "/")
-
-	return cleanURL
 }

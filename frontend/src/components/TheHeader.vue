@@ -45,7 +45,7 @@
             v-for="item in navigationItems"
             :key="item.name"
             @click="navigateTo(item.path)"
-            class="relative px-4 py-2 text-sm font-medium transition-all duration-200 rounded-full"
+            class="relative px-4 py-2 cursor-pointer text-sm font-medium transition-all duration-200 rounded-full"
             :class="[
               isActive(item.path)
                 ? 'text-primary-foreground bg-primary shadow-sm'
