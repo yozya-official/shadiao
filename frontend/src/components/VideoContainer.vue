@@ -459,6 +459,7 @@ defineProps<{
 
 const goToAuthor = (id?: number) => {
   if (!id) return
+  closeVideoModal()
   router.push({ name: 'author', params: { authorId: id } })
 }
 

@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const authorId = route.params.authorId as string
+const authorId = ref('')
 
 const author = ref<AuthorData>({
   name: '',
@@ -96,18 +96,23 @@ const author = ref<AuthorData>({
   uid: 0,
 })
 
-const loadAuthor = async () => {
-  try {
-    const res = await authorApi.getAuthorById(authorId)
-    author.value = res.data
-  } catch (err) {
-    console.error('加载作者信息失败', err)
-  }
-}
+watch(
+  () => route.params.authorId,
+  async (newId) => {
+    if (!newId) return
 
-onMounted(() => {
-  loadAuthor()
-})
+    const id = Array.isArray(newId) ? newId[0] : newId
+
+    try {
+      const res = await authorApi.getAuthorById(id)
+      author.value = res.data
+      authorId.value = id
+    } catch (err) {
+      console.error('加载作者信息失败', err)
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>
@@ -116,7 +121,6 @@ onMounted(() => {
   transform: translateY(-2px);
 }
 
-/* 确保链接颜色在主题切换时正确显示 */
 a {
   color: var(--primary);
 }
