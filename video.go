@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -38,6 +39,11 @@ func createVideo(c *gin.Context) {
 	video.AuthorID = author.ID
 
 	if err := db.Create(&video).Error; err != nil {
+		// 检查是否唯一约束冲突
+		if strings.Contains(strings.ToLower(err.Error()), "unique constraint") {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "该视频已被推荐过了哦~"})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
