@@ -1,12 +1,8 @@
 package main
 
 import (
-	"encoding/json"
-	"io"
 	"net/http"
 	"strconv"
-	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -169,113 +165,4 @@ func deleteVideo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "删除成功"})
-}
-
-type ParseVideoResponse struct {
-	Code       int     `json:"code"`
-	Msg        string  `json:"msg"`
-	ApiVersion string  `json:"api_version"`
-	Timestamp  float64 `json:"timestamp"`
-	Created    int64   `json:"created"`
-	Data       struct {
-		ParseParams struct {
-			Type      string `json:"type"`
-			Platform  string `json:"platform"`
-			ID        string `json:"id"`
-			VideoType string `json:"video_type"`
-			N         int    `json:"n"`
-		} `json:"parse_params"`
-		Author struct {
-			Name   string `json:"name"`
-			Mid    int64  `json:"mid"`
-			Avatar string `json:"avatar"`
-		} `json:"author"`
-		Stat struct {
-			Like    int    `json:"like"`
-			Comment int    `json:"comment"`
-			Collect int    `json:"collect"`
-			Share   int    `json:"share"`
-			AwemeID string `json:"aweme_id"`
-			Time    int64  `json:"time"`
-		} `json:"stat"`
-		Item struct {
-			Title    string  `json:"title"`
-			Cover    string  `json:"cover"`
-			Desc     string  `json:"desc"`
-			Tname    string  `json:"tname"`
-			URL      string  `json:"url"`
-			Quality  string  `json:"quality"`
-			FPS      int     `json:"fps"`
-			Bitrate  string  `json:"bitrate"`
-			Duration float64 `json:"duration"`
-			Size     int64   `json:"size"`
-			SizeStr  string  `json:"size_str"`
-			Height   int     `json:"height"`
-			Width    int     `json:"width"`
-			Cid      int64   `json:"cid"`
-		} `json:"item"`
-	} `json:"data"`
-}
-
-func parseVideoURL(c *gin.Context) {
-	url := c.Query("url")
-	if url == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少 url 参数"})
-		return
-	}
-
-	client := &http.Client{
-		// 禁止自动跳转
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-		Timeout: 2 * time.Second,
-	}
-
-	resp, err := client.Get(url)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	defer resp.Body.Close()
-
-	var realUrl = url
-
-	// 转换短链
-	if strings.Contains(url, "b23.tv") {
-		realUrl = CleanBilibiliURL(resp.Header.Get("Location"))
-		if realUrl == "" {
-			c.JSON(http.StatusOK, gin.H{
-				"url":    url,
-				"status": resp.Status,
-				"note":   "没有发现跳转",
-			})
-			return
-		}
-	} else if strings.Contains(url, "www.bilibili.com/video/BV") {
-		// 转换bv号
-		realUrl = ConvertBvUrlToAv(url)
-	}
-
-	// 调用第三方 API
-	apiResp, err := client.Get("https://api.hk.sisi.us.kg/API/Parse/?url=" + realUrl)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to request parse API", "detail": err.Error()})
-		return
-	}
-	defer apiResp.Body.Close()
-
-	body, err := io.ReadAll(apiResp.Body)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read response", "detail": err.Error()})
-		return
-	}
-
-	var data ParseVideoResponse
-	if err := json.Unmarshal(body, &data); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to parse JSON", "detail": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, data)
 }

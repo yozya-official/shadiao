@@ -652,9 +652,8 @@ const handleAutoFill = async () => {
     formData.video.ctime = new Date(data.stat.time * 1000).toISOString()
 
     toast.success('自动填充成功！')
-  } catch (err) {
-    console.error(err)
-    toast.error('自动填充失败，请检查链接是否正确')
+  } catch (err: unknown) {
+    handleApiError(err)
   }
 }
 

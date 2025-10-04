@@ -300,7 +300,6 @@ const loadUnReviewedVideos = async () => {
     const res = await videoApi.getUnreviewedVideos()
     videos.value = res.data
   } catch (err) {
-    console.error('加载视频失败', err)
     handleApiError(err, '加载')
   }
 }
