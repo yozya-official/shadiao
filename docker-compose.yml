@@ -4,7 +4,7 @@ services:
     container_name: shadiao
     platform: linux/amd64
     ports:
-      - "9901:9000"
+      - "9000:9000"
     volumes:
       # 挂载数据库
       - ./data:/app/data

@@ -72,7 +72,7 @@ COPY --from=backend-builder /app/frontend/dist ./frontend/dist
 ENV DATABASE_URL=/app/index.db
 
 # 暴露端口
-EXPOSE 8000
+EXPOSE 9000
 
 # 启动服务
 CMD ["./server"]
