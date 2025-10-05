@@ -62,6 +62,7 @@ func main() {
 	{
 		// 视频查询
 		public.GET("/videos", service.GetAllVideos)
+		public.POST("/videos", service.CreateVideo)
 		public.GET("/videos/unreviewed", service.GetUnreviewedVideos)
 		public.GET("/video/parse", service.ParseVideoURL)
 		public.GET("/videos/:id", service.GetVideoByID)
@@ -81,7 +82,6 @@ func main() {
 	protected.Use(middleware.APIKeyAuthMiddleware())
 	{
 		// 视频操作
-		protected.POST("/videos", service.CreateVideo)
 		protected.PUT("/videos/:id", service.UpdateVideo)
 		protected.DELETE("/videos/:id", service.DeleteVideo)
 		protected.PATCH("/videos/:id/review", service.UpdateVideoReviewStatus)
