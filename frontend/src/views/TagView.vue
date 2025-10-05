@@ -71,7 +71,7 @@
   </div>
 
   <!-- 编辑标签对话框 -->
-  <dialog id="edit_tag_modal" ref="editModal" class="dialog" @click.self="editModal?.close()">
+  <dialog id="edit_tag_modal" ref="editModal" class="dialog">
     <div class="dialog-body dialog-body-lg">
       <h3 class="text-2xl font-bold pb-6 flex items-center space-x-2">
         <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">

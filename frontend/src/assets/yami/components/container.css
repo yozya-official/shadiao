@@ -145,7 +145,7 @@
 @utility dialog-body {
   @apply relative flex flex-col;
   @apply p-6 max-w-[90vw] max-h-[90vh];
-  @apply bg-card rounded-lg shadow-xl border border-border;
+  @apply bg-card text-foreground rounded-lg shadow-xl border border-border;
   @apply overflow-y-auto;
 
   scale: 0.95;

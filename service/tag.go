@@ -114,6 +114,10 @@ func UpdateTag(c *gin.Context) {
 		}
 		tag.Name = input.Name
 	}
+
+	if input.Type != "" {
+		tag.Type = input.Type
+	}
 	if input.Description != "" {
 		tag.Description = input.Description
 	}
