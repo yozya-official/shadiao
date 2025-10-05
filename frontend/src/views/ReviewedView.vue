@@ -378,6 +378,8 @@
 import { backgroundOptions, styleOptions, worldOptions } from '@/stores/options'
 import { toast } from '@yuelioi/toast'
 
+const route = useRoute()
+
 const videos = ref<Video[]>([])
 
 // 加载未审核视频
@@ -411,6 +413,13 @@ const rejectVideo = async (video: Video) => {
     handleApiError(err, '驳回')
   }
 }
+
+watch(
+  () => route.fullPath,
+  async () => {
+    await loadUnReviewedVideos()
+  },
+)
 
 // 跳转视频
 const goToVideo = (video: Video) => {

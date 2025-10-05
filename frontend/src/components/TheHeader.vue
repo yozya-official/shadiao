@@ -38,7 +38,6 @@
       </div>
 
       <!-- 桌面端导航 -->
-      <!-- 桌面端导航 -->
       <nav class="hidden items-center md:flex">
         <div class="flex items-center space-x-1 bg-muted rounded-full p-1">
           <button
@@ -120,17 +119,14 @@
   </header>
 
   <!-- 设置密钥 -->
-  <dialog id="secret_setting" ref="secretModal" class="modal">
-    <div class="modal-box bg-card">
+  <dialog id="secret_setting" ref="secretModal" class="dialog" @click.self="secretModal?.close()">
+    <div class="dialog-body card bg-card">
       <h3 class="text-lg font-bold pb-4">请输入密钥</h3>
       <div class="flex justify-between gap-3">
         <input type="text" v-model="apiKey" class="input input-primary" />
         <button class="btn btn-primary" onclick="secret_setting.close()">确认</button>
       </div>
     </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
   </dialog>
 
   <!-- 移动端菜单 -->
@@ -238,6 +234,7 @@ const navigationItems = ref([
 const route = useRoute()
 
 const navigateTo = (path: string) => {
+  mobileMenuOpen.value = false
   router.push(path)
 }
 

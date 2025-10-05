@@ -31,9 +31,7 @@
   <div class="container px-6 py-8 relative">
     <!-- 统计卡片 -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div
-        class="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
-      >
+      <div class="card-primary p-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-muted-foreground mb-1">总标签数</p>
@@ -50,61 +48,21 @@
           </div>
         </div>
       </div>
-
-      <div
-        class="bg-gradient-to-br from-chart-2/10 to-chart-2/5 border border-chart-2/20 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-muted-foreground mb-1">当前页数</p>
-            <p class="text-3xl font-bold text-chart-2">{{ currentPage }}/{{ totalPages }}</p>
-          </div>
-          <div class="w-14 h-14 bg-chart-2/10 rounded-full flex items-center justify-center">
-            <svg class="w-7 h-7 text-chart-2" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="bg-gradient-to-br from-chart-3/10 to-chart-3/5 border border-chart-3/20 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-muted-foreground mb-1">每页显示</p>
-            <p class="text-3xl font-bold text-chart-3">{{ pageSize }}</p>
-          </div>
-          <div class="w-14 h-14 bg-chart-3/10 rounded-full flex items-center justify-center">
-            <svg class="w-7 h-7 text-chart-3" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- 标签卡片网格 -->
     <div
       v-if="tags.length > 0"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
+      class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 mb-8"
     >
-      <div
-        v-for="tag in pagedTags"
-        :key="tag.id"
-        class="group bg-card border border-border rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-1 hover:border-primary/50"
-      >
-        <div class="relative">
-          <div class="p-6 pt-8">
-            <!-- 标签图标 -->
+      <div v-for="tag in pagedTags" :key="tag.id" class="group card card-hover">
+        <div class="p-3">
+          <!-- 标签图标和类型 -->
+          <div class="flex items-start justify-between mb-3">
             <div
-              class="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-primary/20 to-chart-2/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+              class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-chart-2/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
             >
-              <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fill-rule="evenodd"
                   d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
@@ -112,61 +70,60 @@
                 ></path>
               </svg>
             </div>
-
-            <!-- 标签信息 -->
-            <h2
-              class="text-lg font-bold text-foreground mb-2 text-center group-hover:text-primary transition-colors duration-200 line-clamp-1"
-            >
-              {{ tag.displayName || tag.name }}
-            </h2>
-
-            <div
-              class="inline-flex items-center px-3 py-1 rounded-full bg-accent text-xs font-medium text-muted-foreground mb-3 mx-auto w-fit"
+            <span
+              class="px-2 py-0.5 rounded-md badge-secondary text-xs font-medium text-muted-foreground"
             >
               {{ tag.typeDisplayName || tag.type }}
-            </div>
+            </span>
+          </div>
 
-            <p class="text-sm text-muted-foreground text-center mb-4 line-clamp-2 min-h-[2.5rem]">
-              {{ tag.description || '暂无描述' }}
-            </p>
+          <!-- 标签信息 -->
+          <h2
+            class="text-base font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-200 line-clamp-1"
+          >
+            {{ tag.displayName || tag.name }}
+          </h2>
 
-            <!-- 操作按钮 -->
-            <div class="flex gap-2">
-              <button
-                @click="goToTag(tag.id)"
-                class="flex-1 btn btn-sm btn-primary rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-md"
-              >
-                查看详情
-              </button>
-              <button
-                v-if="isLogin"
-                @click="openEditModal(tag)"
-                class="btn btn-sm btn-ghost rounded-lg text-sm font-medium transition-all duration-200 hover:bg-accent"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  ></path>
-                </svg>
-              </button>
-              <button
-                v-if="isLogin"
-                @click="delTagConfirm(tag)"
-                class="btn btn-sm btn-ghost text-destructive rounded-lg text-sm font-medium transition-all duration-200 hover:bg-destructive/10"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  ></path>
-                </svg>
-              </button>
-            </div>
+          <p class="text-xs text-muted-foreground mb-3 line-clamp-2 min-h-[2rem]">
+            {{ tag.description || '暂无描述' }}
+          </p>
+
+          <!-- 操作按钮 -->
+          <div class="flex gap-1.5">
+            <button
+              @click="goToTag(tag.id)"
+              class="flex-1 btn btn-sm btn-primary rounded-lg text-xs font-medium transition-all duration-200 hover:shadow-md py-1.5"
+            >
+              详情
+            </button>
+            <button
+              v-if="isLogin"
+              @click="openEditModal(tag)"
+              class="btn btn-sm btn-ghost rounded-lg transition-all duration-200 hover:bg-accent p-1.5"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+            </button>
+            <button
+              v-if="isLogin"
+              @click="delTagConfirm(tag)"
+              class="btn btn-sm btn-ghost text-destructive rounded-lg transition-all duration-200 hover:bg-destructive/10 p-1.5"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -272,8 +229,13 @@
     </div>
 
     <!-- 删除确认模态框 -->
-    <dialog id="delete_tag_modal" ref="deleteModal" class="modal">
-      <div class="modal-box bg-card border border-border">
+    <dialog
+      id="delete_tag_modal"
+      ref="deleteModal"
+      class="dialog dialog-slide-down dialog-bounce"
+      @click.self="deleteModal?.close()"
+    >
+      <div class="dialog-body dialog-body-md">
         <div class="text-center mb-6">
           <div
             class="w-16 h-16 mx-auto mb-4 rounded-full bg-destructive/10 flex items-center justify-center"
@@ -309,20 +271,17 @@
           </button>
           <button
             @click="delTag"
-            class="flex-1 btn btn-error rounded-lg transition-colors duration-200"
+            class="flex-1 btn btn-destructive rounded-lg transition-colors duration-200"
           >
             确认删除
           </button>
         </div>
       </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
     </dialog>
 
     <!-- 添加/编辑标签模态框 -->
-    <dialog id="edit_tag_modal" ref="editModal" class="modal">
-      <div class="modal-box bg-card max-w-2xl border border-border">
+    <dialog id="edit_tag_modal" ref="editModal" class="dialog" @click.self="editModal?.close()">
+      <div class="dialog-body-lg dialog-body m-2">
         <h3 class="text-2xl font-bold pb-6 flex items-center space-x-2">
           <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -490,9 +449,6 @@
           </button>
         </div>
       </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
     </dialog>
   </div>
 </template>

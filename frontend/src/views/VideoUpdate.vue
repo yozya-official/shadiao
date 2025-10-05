@@ -499,7 +499,6 @@ const formData = reactive<VideoData>({
 // 加载视频数据
 onMounted(async () => {
   const videoId = route.params.id as string
-  console.log(route)
   if (!videoId) {
     toast.error('视频ID不存在')
     router.push('/')
@@ -508,7 +507,7 @@ onMounted(async () => {
 
   try {
     const response = await videoApi.getVideoById(videoId)
-    Object.assign(formData, response.data)
+    Object.assign(formData, response.data.video)
   } catch (error: unknown) {
     handleApiError(error, '加载')
     router.push('/')

@@ -12,21 +12,21 @@
 
   <div class="container px-6 py-8 relative">
     <!-- 标签信息卡片 -->
-    <div
-      class="bg-card border border-border rounded-3xl shadow-lg p-8 mb-8 hover:shadow-xl transition-all duration-300"
-    >
+    <div class="card relative p-8 mb-8">
       <div
         class="flex flex-col md:flex-row items-start md:items-center space-y-6 md:space-y-0 md:space-x-8"
       >
-        <div class="flex-1">
+        <div class="flex-1 flex flex-col gap-2">
           <h1 class="text-3xl font-bold text-foreground mb-2">
             {{ tag?.displayName || tag?.name }}
           </h1>
-          <div class="flex items-center space-x-4 text-muted-foreground text-sm mb-4">
+
+          <div class="absolute text-foreground/50 top-4 right-4 text-sm">
             <span>ID: {{ tag?.id }}</span>
-            <span v-if="tag?.typeDisplayName">类型: {{ tag.typeDisplayName }}</span>
           </div>
-          <p class="text-muted-foreground">{{ tag?.description }}</p>
+          <span class="">类型: {{ tag?.typeDisplayName || tag?.type }}</span>
+
+          <p class="text-muted-foreground">描述: {{ tag?.description || '暂无描述' }}</p>
         </div>
 
         <!-- 编辑按钮 -->
@@ -45,11 +45,9 @@
     </div>
 
     <!-- 作品列表 -->
-    <div class="bg-card border border-border rounded-2xl shadow-lg p-6">
-      <div class="flex items-center space-x-3 mb-6">
-        <div class="w-1 h-8 bg-gradient-to-b from-primary to-chart-2 rounded-full"></div>
-        <h2 class="text-2xl font-bold text-foreground">全部作品</h2>
-        <div class="flex-1 h-px bg-gradient-to-r from-border to-transparent ml-4"></div>
+    <div class="card p-6">
+      <div class="card-title flex items-center space-x-3 mb-6">
+        <h2 class="pl-2">全部作品</h2>
       </div>
 
       <div class="relative">
@@ -73,8 +71,8 @@
   </div>
 
   <!-- 编辑标签对话框 -->
-  <dialog id="edit_tag_modal" ref="editModal" class="modal">
-    <div class="modal-box bg-card max-w-2xl">
+  <dialog id="edit_tag_modal" ref="editModal" class="dialog" @click.self="editModal?.close()">
+    <div class="dialog-body dialog-body-lg">
       <h3 class="text-2xl font-bold pb-6 flex items-center space-x-2">
         <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -242,9 +240,6 @@
         </button>
       </div>
     </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
   </dialog>
 </template>
 

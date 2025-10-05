@@ -10,11 +10,8 @@
   </PageHeader>
   <div class="container px-6 py-8 relative">
     <!-- 筛选器区域 -->
-    <div
-      v-if="showFilter"
-      class="bg-card/90 backdrop-blur-sm border rounded-3xl shadow p-6 mb-6 hover:shadow-2xl transition-all duration-300"
-    >
-      <div class="flex items-center justify-between mb-8">
+    <div v-if="showFilter" class="card p-6 mb-6">
+      <div class="flex items-center justify-between mb-2 sm:mb-8">
         <div class="flex items-center">
           <div class="size-4 bg-gradient-to-br from-primary to-chart-2 rounded-full mr-3"></div>
           <h3 class="">筛选器</h3>
@@ -65,7 +62,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 mb-8">
         <!-- 搜索框 -->
         <div class="space-y-2">
           <label class="flex items-center space-x-2 font-semibold">
@@ -99,7 +96,7 @@
             </svg>
             <span>背景设定</span>
           </label>
-          <select id="background" v-model="filters.background" class="w-full select input-primary">
+          <select id="background" v-model="filters.background" class="w-full select select-primary">
             <option value="">全部背景</option>
             <option
               v-for="(icon, background) in backgroundOptions"
@@ -241,7 +238,7 @@
 
     <!-- 结果统计和排序 -->
     <div
-      class="flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 bg-card/60 backdrop-blur-sm border rounded-2xl p-6"
+      class="flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 card backdrop-blur-sm border rounded-2xl p-6"
     >
       <div class="text-muted-foreground text-lg pb-2">
         找到

@@ -107,7 +107,7 @@ func UpdateTag(c *gin.Context) {
 	// 更新字段
 	if input.Name != "" {
 		// 检查新名称是否已被其他标签使用
-		existing, _ := db.GetTagByName(input.Name)
+		existing, _ := db.GetTagByNameAndType(input.Name, input.Type)
 		if existing != nil && existing.ID != id {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "标签名称已存在"})
 			return

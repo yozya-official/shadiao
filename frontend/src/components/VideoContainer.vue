@@ -4,20 +4,18 @@
     <div
       v-for="video in videos"
       :key="video.id"
-      class="group relative bg-card border border-border rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2 cursor-pointer"
+      class="group relative card overflow-hidden card-hover cursor-pointer"
     >
       <!-- 封面图片 -->
       <div class="relative overflow-hidden">
         <img
           :src="video.cover"
           referrerpolicy="no-referrer"
-          class="w-full h-36 md:h-40 object-cover transition-transform duration-500 group-hover:scale-110"
+          class="h-36 md:h-40 image image-hover"
           :alt="video.title"
         />
         <!-- 渐变遮罩 -->
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        ></div>
+        <div class="image-mask"></div>
 
         <!-- 删除按钮 -->
         <button

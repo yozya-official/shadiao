@@ -73,16 +73,12 @@
             <button
               v-if="isLogin"
               @click="delAuthorConfirm(author)"
-              class="btn btn-sm btn-error hover:bg-destructive rounded-lg text-sm font-medium transition-all duration-200"
+              class="btn btn-sm btn-destructive bg-destructive/80"
             >
-              删除作者
+              删除
             </button>
-            <button
-              @click="goToBiliSpace(author.uid)"
-              class="btn btn-sm btn-primary rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-md"
-            >
-              作者主页
-            </button>
+            <button @click="goToAuthor(author.id)" class="btn btn-sm btn-primary">详情</button>
+            <button @click="goToBiliSpace(author.uid)" class="btn btn-sm btn-accent">B站</button>
           </div>
         </div>
       </div>
