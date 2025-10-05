@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@import './yami/index.css';
+@reference '@yuelioi/yami/src/index.css';
 
 @import './base.css';
+@import './theme.css';

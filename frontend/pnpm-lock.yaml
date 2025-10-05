@@ -23,6 +23,9 @@ importers:
       '@yuelioi/utils':
         specifier: ^1.0.7
         version: 1.0.7
+      '@yuelioi/yami':
+        specifier: ^1.0.1
+        version: 1.0.1
       axios:
         specifier: ^1.12.2
         version: 1.12.2
@@ -912,6 +915,9 @@ packages:
 
   '@yuelioi/utils@1.0.7':
     resolution: {integrity: sha512-5YXivcmedrIfKa9dds/RCi6Yecb+4QJSQyQaDzNmMqCAZZa2f+hP8xiLK31luMGQMeCZ43rMGtEKsxwuhGIyqA==, tarball: https://npm.pkg.github.com/download/@yuelioi/utils/1.0.7/4a96a3b9283fd85136b4a335d281c35e5f0c07cc}
+
+  '@yuelioi/yami@1.0.1':
+    resolution: {integrity: sha512-GkzYlIWIGcKDkQK7pq7YW8mNmV4sGutWa2q0AYkn2MEX9ywMO+MxY+EZY8IKesSLSFtndcY6aoknpUde2Nr00g==, tarball: https://npm.pkg.github.com/download/@yuelioi/yami/1.0.1/4908d1c3f122c365898e87fcfe5f8f14232e54fb}
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -3411,6 +3417,8 @@ snapshots:
   '@yuelioi/utils@1.0.7':
     dependencies:
       dayjs: 1.11.18
+
+  '@yuelioi/yami@1.0.1': {}
 
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:

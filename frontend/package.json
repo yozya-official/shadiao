@@ -23,6 +23,7 @@
     "@yuelioi/components": "^1.0.23",
     "@yuelioi/toast": "^1.0.16",
     "@yuelioi/utils": "^1.0.7",
+    "@yuelioi/yami": "^1.0.1",
     "axios": "^1.12.2",
     "dayjs": "^1.11.18",
     "pinia": "^3.0.3",
