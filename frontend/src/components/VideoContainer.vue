@@ -79,7 +79,7 @@
         <div class="flex items-center justify-between text-sm">
           <div
             v-if="showAuthor"
-            @click="router.push({ name: 'author', params: { authorId: video.author.id } })"
+            @click="router.push({ name: 'author', params: { authorId: video.author?.id } })"
             class="flex items-center space-x-2 flex-1 min-w-0"
           >
             <div
@@ -87,12 +87,12 @@
             >
               <img
                 referrerpolicy="no-referrer"
-                :src="video.author.avatar"
-                :alt="video.author.name"
+                :src="video.author?.avatar"
+                :alt="video.author?.name"
                 class="w-full h-full rounded-full object-cover"
               />
             </div>
-            <span class="text-muted-foreground truncate font-medium">{{ video.author.name }}</span>
+            <span class="text-muted-foreground truncate font-medium">{{ video.author?.name }}</span>
           </div>
           <time class="text-xs text-muted-foreground/70 whitespace-nowrap ml-2">
             {{ formatDate(video.ctime || new Date().toISOString()) }}
@@ -102,7 +102,7 @@
         <!-- 主要标签 -->
         <div class="flex flex-wrap gap-2">
           <span
-            v-if="video.isOriginal"
+            v-if="video.isOriginal()"
             class="inline-flex items-center px-2.5 py-1 bg-primary/10 text-primary text-xs rounded-md font-medium border border-primary/20"
           >
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -113,7 +113,7 @@
             原创
           </span>
           <span
-            v-if="video.isCompleted"
+            v-if="video.isCompleted()"
             class="inline-flex items-center px-2.5 py-1 bg-chart-2/10 text-chart-2 text-xs rounded-md font-medium border border-chart-2/20"
           >
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -126,7 +126,7 @@
             完结
           </span>
           <span
-            v-if="video.hasSystem"
+            v-if="video.hasSystem()"
             class="inline-flex items-center px-2.5 py-1 bg-chart-3/10 text-chart-3 text-xs rounded-md font-medium border border-chart-3/20"
           >
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -139,27 +139,28 @@
             系统
           </span>
           <span
-            v-if="video.background"
+            v-if="video.background()"
             class="inline-flex items-center px-2.5 py-1 bg-accent/60 text-accent-foreground text-xs rounded-md font-medium"
           >
-            {{ backgroundOptions[video.background] }} {{ video.background }}
+            {{ backgroundOptions[video.background()?.name || ''] }} {{ video.background()?.name }}
+            {{}}
           </span>
         </div>
 
         <!-- 风格标签 -->
-        <div v-if="video.style.length > 0" class="flex flex-wrap gap-1.5">
+        <div v-if="video.style().length > 0" class="flex flex-wrap gap-1.5">
           <span
-            v-for="s in video.style.slice(0, 3)"
-            :key="s"
+            v-for="s in video.style().slice(0, 3)"
+            :key="s.id"
             class="px-2 py-0.5 bg-muted/40 text-muted-foreground text-xs rounded border border-border/50"
           >
-            {{ styleOptions[s] }} {{ s }}
+            {{ styleOptions[s.name] }} {{ s.name }}
           </span>
           <span
             v-if="video.style.length > 3"
             class="px-2 py-0.5 bg-muted/40 text-muted-foreground text-xs rounded border border-border/50"
           >
-            +{{ video.style.length - 3 }}
+            +{{ video.style().length - 3 }}
           </span>
         </div>
       </div>
@@ -238,18 +239,18 @@
           <div
             v-if="showAuthor"
             class="flex cursor-pointer items-center space-x-3 p-4 bg-muted/20 rounded-xl"
-            @click="goToAuthor(selectedVideo.author.id)"
+            @click="goToAuthor(selectedVideo.author?.id)"
           >
             <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-chart-2/20 p-1">
               <img
-                :src="selectedVideo.author.avatar"
-                :alt="selectedVideo.author.name"
+                :src="selectedVideo.author?.avatar"
+                :alt="selectedVideo.author?.name"
                 referrerpolicy="no-referrer"
                 class="w-full h-full rounded-full object-cover"
               />
             </div>
             <div>
-              <div class="text-foreground font-semibold">{{ selectedVideo.author.name }}</div>
+              <div class="text-foreground font-semibold">{{ selectedVideo.author?.name }}</div>
               <div class="text-sm text-muted-foreground">创作者</div>
             </div>
           </div>
@@ -286,7 +287,7 @@
             </h4>
             <div class="flex flex-wrap gap-2">
               <span
-                v-if="selectedVideo.isOriginal"
+                v-if="selectedVideo.isOriginal()"
                 class="inline-flex items-center px-3 py-2 bg-primary/10 text-primary rounded-lg font-medium border border-primary/20"
               >
                 <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
@@ -297,7 +298,7 @@
                 原创作品
               </span>
               <span
-                v-if="selectedVideo.isCompleted"
+                v-if="selectedVideo.isCompleted()"
                 class="inline-flex items-center px-3 py-2 bg-chart-2/10 text-chart-2 rounded-lg font-medium border border-chart-2/20"
               >
                 <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
@@ -310,20 +311,21 @@
                 已完结
               </span>
               <span
-                v-if="selectedVideo.background"
+                v-if="selectedVideo.background()"
                 class="inline-flex items-center px-3 py-2 bg-accent/60 text-accent-foreground rounded-lg font-medium"
               >
-                {{ backgroundOptions[selectedVideo.background] }} {{ selectedVideo.background }}
+                {{ backgroundOptions[selectedVideo.background()?.name || ''] }}
+                {{ selectedVideo.background()?.name }}
               </span>
               <span
-                v-for="s in selectedVideo.style"
-                :key="s"
+                v-for="s in selectedVideo.style()"
+                :key="s.id"
                 class="inline-flex items-center px-3 py-2 bg-muted/60 text-muted-foreground rounded-lg font-medium border border-border"
               >
-                {{ styleOptions[s] }} {{ s }}
+                {{ styleOptions[s.name] }} {{ s.name }}
               </span>
               <span
-                v-if="selectedVideo.hasSystem"
+                v-if="selectedVideo.hasSystem()"
                 class="inline-flex items-center px-3 py-2 bg-chart-3/10 text-chart-3 rounded-lg font-medium border border-chart-3/20"
               >
                 <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
@@ -431,7 +433,6 @@
 
 <script setup lang="ts">
 import { videoApi } from '@/api'
-import type { VideoData } from '@/models'
 import { backgroundOptions, styleOptions } from '@/stores/options'
 import { formatDate, handleApiError } from '@/utils'
 import { toast } from '@yuelioi/toast'
@@ -448,12 +449,12 @@ const { isLogin } = authStore
 import { useVideoStore } from '@/stores/videoStore'
 const videoStore = useVideoStore()
 
-const selectedVideo = ref<VideoData | null>(null)
+const selectedVideo = ref<Video | null>(null)
 const showVideoModal = ref(false)
 const showDeleteModal = ref(false)
 
 defineProps<{
-  videos: VideoData[]
+  videos: Video[]
   showAuthor?: boolean
 }>()
 
@@ -468,7 +469,7 @@ const goToEdit = () => {
   router.push({ name: 'videos-update', params: { id: selectedVideo.value?.id } })
 }
 
-const openVideo = (video: VideoData) => {
+const openVideo = (video: Video) => {
   selectedVideo.value = video
   showVideoModal.value = true
   document.body.style.overflow = 'hidden'
@@ -479,7 +480,7 @@ const closeVideoModal = () => {
   document.body.style.overflow = ''
 }
 
-const delVideoConfirm = (video: VideoData) => {
+const delVideoConfirm = (video: Video) => {
   console.log(111)
   selectedVideo.value = video
   showDeleteModal.value = true

@@ -10,7 +10,7 @@
     </template>
   </PageHeader>
 
-  <div class="container mx-auto px-6 py-8 max-w-6xl relative">
+  <div class="container px-6 py-8 relative">
     <!-- 提示信息 -->
     <div class="card bg-card rounded-2xl p-5 mb-8 shadow">
       <div class="flex items-center space-x-2 mb-4">
@@ -628,15 +628,11 @@ const formData = reactive<VideoNewData>({
     uid: 0,
     name: '',
     avatar: '',
+    id: 0,
   },
   video: {
     title: '',
     aid: 0,
-    author: {
-      uid: 0,
-      name: '',
-      avatar: '',
-    },
     url: '',
     cover: '',
     duration: 0,
@@ -648,6 +644,7 @@ const formData = reactive<VideoNewData>({
     background: '',
     style: [],
     hasSystem: false,
+    ctime: '',
   },
 })
 
@@ -681,6 +678,7 @@ const handleAutoFill = async () => {
     const data = resp.data.data
 
     formData.author = {
+      id: 0,
       uid: data.author.mid,
       name: data.author.name,
       avatar: data.author.avatar,

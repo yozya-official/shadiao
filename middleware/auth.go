@@ -1,7 +1,8 @@
-package main
+package middleware
 
 import (
 	"net/http"
+	"shadiao/conf"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -18,7 +19,7 @@ func APIKeyAuthMiddleware() gin.HandlerFunc {
 
 		// 格式：Authorization: ApiKey xxx
 		parts := strings.SplitN(authHeader, " ", 2)
-		if !(len(parts) == 2 && strings.ToLower(parts[0]) == "apikey" && IsValidAPIKey(parts[1])) {
+		if !(len(parts) == 2 && strings.ToLower(parts[0]) == "apikey" && conf.IsValidAPIKey(parts[1])) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "无效的验证信息"})
 			c.Abort()
 			return

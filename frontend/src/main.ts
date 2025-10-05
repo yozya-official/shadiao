@@ -1,3 +1,6 @@
+import '@yuelioi/components/the-footer.css'
+import '@yuelioi/toast/dist/toast.css'
+
 import './assets/main.css'
 
 import { createApp } from 'vue'

@@ -1,15 +1,13 @@
-import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
 import { videoApi } from '@/api/index'
-import type { VideoData, Filters } from '@/models'
+import { Video, type Filters } from '@/models'
 
 export const useVideoStore = defineStore('video', () => {
-  const videos = ref<VideoData[]>([])
+  const videos = ref<Video[]>([])
 
   const loadVideos = async () => {
     try {
       const resp = await videoApi.getAllVideos()
-      videos.value = resp.data
+      videos.value = resp.data.videos.map((v: Partial<Video>) => new Video(v))
     } catch (err) {
       console.error(err)
     }

@@ -2,7 +2,7 @@
   <header
     class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 transition-all duration-300"
   >
-    <div class="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-6">
+    <div class="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-6">
       <!-- Logo 区域 -->
       <div class="flex items-center space-x-3">
         <a
@@ -147,7 +147,7 @@
       id="mobile-menu"
       class="fixed top-16 right-0 left-0 z-40 border-b border-border/40 bg-card/95 backdrop-blur-xl drop-shadow-2xl md:hidden"
     >
-      <div class="container mx-auto max-w-screen-2xl px-6 py-6">
+      <div class="container px-6 py-6">
         <!-- 移动端导航 -->
         <nav class="space-y-2">
           <button
@@ -229,6 +229,7 @@ const secretModal = ref<HTMLDialogElement>()
 const navigationItems = ref([
   { name: '视频', path: '/', active: false },
   { name: 'UP主', path: '/authors', active: false },
+  { name: '标签', path: '/tags', active: false },
   { name: '审核', path: '/videos/review', active: false },
   { name: '交流', path: '/communicate', active: false },
   { name: '提交视频', path: '/video/new', active: false },

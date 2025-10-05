@@ -8,7 +8,7 @@
       </svg>
     </template>
   </PageHeader>
-  <div class="container mx-auto px-6 py-8 max-w-6xl relative ff">
+  <div class="container px-6 py-8 relative">
     <!-- 筛选器区域 -->
     <div
       v-if="showFilter"
@@ -253,7 +253,8 @@
         <select v-model="sortBy" class="px-4 select pr-8 py-2 input-primary" aria-label="排序方式">
           <option value="name">按名称排序</option>
           <option value="author">按作者排序</option>
-          <option value="created">按创建时间</option>
+          <option value="ctime">按创建时间</option>
+          <option value="created">按投稿时间</option>
         </select>
         <button
           @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
@@ -391,12 +392,15 @@ const sortedVideos = computed(() => {
         bValue = b.title
         break
       case 'author':
-        aValue = a.author.uid
-        bValue = b.author.uid
+        aValue = a.author?.uid || 0
+        bValue = b.author?.uid || 0
         break
-      case 'created':
+      case 'ctime':
         aValue = a.ctime || new Date()
         bValue = b.ctime || new Date()
+      case 'created':
+        aValue = a.createdAt || new Date()
+        bValue = b.createdAt || new Date()
         break
       default:
         return 0
@@ -412,7 +416,7 @@ const sortedVideos = computed(() => {
   return result
 })
 
-const filteredVideos = ref<VideoData[]>([])
+const filteredVideos = ref<Video[]>([])
 
 watch(
   () => ({
@@ -423,33 +427,39 @@ watch(
   }),
   () => {
     currentPage.value = 1
-
     let result = [...videos.value]
 
-    const filterRules: [keyof Filters, (video: VideoData, value: unknown) => boolean][] = [
-      [
-        'search',
-        (video, value: unknown) => {
-          const v = value as string
-          return (
-            video.title.toLowerCase().includes(v.toLowerCase()) ||
-            video.author?.name.toLowerCase().includes(v.toLowerCase())
-          )
-        },
-      ],
-      ['background', (video, value: unknown) => video.background === value],
-      ['style', (video, value: unknown) => video.style.includes(value as string)],
-      ['world', (video, value: unknown) => video.world.includes(value as string)],
-      ['isOriginal', (video, value: unknown) => value === null || video.isOriginal === value],
-      ['isCompleted', (video, value: unknown) => value === null || video.isCompleted === value],
-      ['hasSystem', (video, value: unknown) => value === null || video.hasSystem === value],
-    ]
+    // 搜索过滤
+    if (filters.value.search) {
+      const keyword = filters.value.search.toLowerCase()
+      result = result.filter((v) => {
+        return (
+          v.title.toLowerCase().includes(keyword) || v.author?.name.toLowerCase().includes(keyword)
+        )
+      })
+    }
 
-    // 循环应用筛选
-    for (const [key, fn] of filterRules) {
-      const value = filters.value[key]
-      if (value !== null && value !== '') {
-        result = result.filter((video) => fn(video, value))
+    // 背景/世界/风格过滤
+    if (filters.value.background) {
+      result = result.filter((v) => v.background()?.name === filters.value.background)
+    }
+    if (filters.value.world) {
+      result = result.filter((v) => v.world()?.name === filters.value.world)
+    }
+    if (filters.value.style) {
+      result = result.filter((v) => v.style().some((tag) => tag.name === filters.value.style))
+    }
+
+    // 布尔标签过滤
+    const booleanFilters: (keyof Filters)[] = ['isOriginal', 'isCompleted', 'hasSystem']
+    for (const key of booleanFilters) {
+      const filterVal = filters.value[key]
+      if (filterVal !== null && filterVal !== '') {
+        result = result.filter((v: Video) => {
+          // @ts-expect-error tag 布尔筛选器
+          const val = v[key]() as boolean | null
+          return val === filterVal
+        })
       }
     }
 

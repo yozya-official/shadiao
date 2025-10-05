@@ -1,4 +1,4 @@
-package main
+package service
 
 import (
 	"encoding/json"
@@ -287,7 +287,7 @@ func scrapeVideo(aid string) (*ParseVideoResponse, error) {
 }
 
 // Gin 路由处理函数
-func parseVideoURL(c *gin.Context) {
+func ParseVideoURL(c *gin.Context) {
 	url := c.Query("url")
 	if url == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少 url 参数"})

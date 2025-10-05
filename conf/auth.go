@@ -1,4 +1,4 @@
-package main
+package conf
 
 import (
 	"crypto/rand"
@@ -7,11 +7,11 @@ import (
 )
 
 func AddAPIKey(key string) {
-	apiKeys[key] = true
+	ApiKeys[key] = true
 }
 
 func IsValidAPIKey(key string) bool {
-	return apiKeys[key]
+	return ApiKeys[key]
 }
 
 func GenerateAPIKey() (string, error) {
@@ -24,7 +24,7 @@ func GenerateAPIKey() (string, error) {
 }
 
 func InitAPIKey() string {
-	data, err := os.ReadFile(apiKeyFile)
+	data, err := os.ReadFile(ApiKeyFile)
 	if err == nil {
 		key := string(data)
 		AddAPIKey(key)
@@ -36,7 +36,7 @@ func InitAPIKey() string {
 		panic(err)
 	}
 
-	err = os.WriteFile(apiKeyFile, []byte(key), 0644)
+	err = os.WriteFile(ApiKeyFile, []byte(key), 0644)
 	if err != nil {
 		panic(err)
 	}

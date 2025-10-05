@@ -10,7 +10,7 @@
       </svg>
     </template>
   </PageHeader>
-  <div class="container mx-auto px-6 py-8 max-w-6xl relative">
+  <div class="container px-6 py-8 relative">
     <!-- 主要内容卡片 -->
     <div
       class="bg-card/90 backdrop-blur-sm border border-border rounded-3xl shadow-xl p-8 mb-8 hover:shadow-2xl transition-all duration-300"

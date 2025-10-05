@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
+import type { VideoData } from '@/models'
 
 // 创建 axios 实例
 const api = axios.create({
@@ -66,6 +67,15 @@ export const videoApi = {
    */
   getVideoById: (id: string) => {
     return api.get(`/videos/${id}`)
+  },
+
+  /**
+   * 根据tagID获取视频数据
+   * @param {string|number} id - 视频ID
+   * @returns {Promise}
+   */
+  getVideoByTagId: (id: string) => {
+    return api.get(`/tags/${id}`)
   },
 
   /**
@@ -158,5 +168,59 @@ export const authorApi = {
    */
   deleteAuthor: (id: string | number) => {
     return api.delete(`/authors/${id}`)
+  },
+}
+
+export const tagApi = {
+  /**
+   * 创建标签
+   * @param tagData 标签数据
+   */
+  createTag: (tagData: { name: string; type: string; description?: string }) => {
+    return api.post('/tags', tagData)
+  },
+
+  /**
+   * 获取所有标签
+   * @param params 可选查询参数
+   */
+  getAllTags: () => {
+    return api.get('/tags')
+  },
+
+  /**
+   * 根据 ID 获取标签
+   * @param id 标签 ID
+   */
+  getTagById: (id: number | string) => {
+    return api.get(`/tags/${id}`)
+  },
+
+  /**
+   * 更新标签
+   * @param id 标签 ID
+   * @param tagData 更新的数据
+   */
+  updateTag: (
+    id: number | string,
+    tagData: { name?: string; type?: string; description?: string },
+  ) => {
+    return api.put(`/tags/${id}`, tagData)
+  },
+
+  /**
+   * 删除标签
+   * @param id 标签 ID
+   */
+  deleteTag: (id: number | string) => {
+    return api.delete(`/tags/${id}`)
+  },
+
+  /**
+   * 获取标签关联的所有视频
+   * @param id 标签 ID
+   */
+  getTagVideos: (id: number | string) => {
+    return api.get(`/tags/${id}/videos`)
   },
 }

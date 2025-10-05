@@ -2,74 +2,102 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"io"
 	"net/http"
+	"os"
+	"shadiao/conf"
+	"shadiao/db"
+	"shadiao/middleware"
+	"shadiao/service"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	initDB()
+	// 配置日志
+	logger := initLog()
+	log.Logger = logger
 
-	// 获取底层 *sql.DB 并关闭
-	sqlDB, err := db.DB()
-	if err != nil {
-		log.Fatal("failed to get sql.DB:", err)
+	if envPath := os.Getenv("DATABASE_URL"); envPath != "" {
+		conf.DbPath = envPath
 	}
-	defer sqlDB.Close() // 程序退出时自动关闭连接池
+
+	db.Init(db.Config{
+		DSN:          conf.DbPath,
+		MaxIdleConns: 10,
+		MaxOpenConns: 100,
+		MaxLifetime:  10,
+	})
 
 	// 生成随机密钥
-	key := InitAPIKey()
+	key := conf.InitAPIKey()
 	fmt.Println("生成的密钥为: ", key)
 
-	r := gin.Default()
+	// 初始化Gin
+	gin.DefaultWriter = io.Discard
+	gin.DefaultErrorWriter = io.Discard
+	r := gin.New()
+	r.Use(middleware.GinLogger(logger), middleware.GinRecovery(logger))
 
-	// CORS 中间件 - 必须放在最前面
-	r.Use(func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
-		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization")
-		c.Header("Access-Control-Expose-Headers", "Content-Length")
-		// c.Header("Access-Control-Allow-Credentials", "true")
+	mode := strings.ToLower(os.Getenv("APP_MODE"))
 
-		// 处理预检请求
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	})
+	// 基于部署方式动态修改参数
+	addr := ":9000"
+	if mode == "release" {
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		// 全局使用
+		addr = "0.0.0.0" + addr
+		// CORS 中间件
+		r.Use(middleware.Cors())
+	}
 
 	// API 路由组 - 必须在静态文件之前定义
 	api := r.Group("/api/v1")
-	{
-		// 视频路由
-		api.GET("/videos/unreviewed", getUnreviewedVideos)
-		api.POST("/videos", createVideo)
-		api.GET("/videos", getAllVideos)
-		api.GET("/video/parse", parseVideoURL)
-		api.GET("/videos/:id", getVideoByID)
-		api.PUT("/videos/:id", updateVideo)
 
-		// 作者路由
-		api.POST("/authors", createAuthor)
-		api.GET("/authors", getAllAuthors)
-		api.GET("/authors/:id", getAuthorByID)
-		api.PUT("/authors/:id", updateAuthor)
-		api.PUT("/authors/:id/master", setMaster)
+	// 公共查询接口
+	public := api.Group("/")
+	{
+		// 视频查询
+		public.GET("/videos", service.GetAllVideos)
+		public.GET("/videos/unreviewed", service.GetUnreviewedVideos)
+		public.GET("/video/parse", service.ParseVideoURL)
+		public.GET("/videos/:id", service.GetVideoByID)
+
+		// 作者查询
+		public.GET("/authors", service.GetAllAuthors)
+		public.GET("/authors/:id", service.GetAuthorByID)
+
+		// 标签查询
+		public.GET("/tags", service.GetAllTags)
+		public.GET("/tags/:id", service.GetTagByID)
+		public.GET("/tags/:id/videos", service.GetTagVideos)
 	}
 
-	// 需要授权的路由
-	authorized := api.Group("/")
-	authorized.Use(APIKeyAuthMiddleware())
+	// 需要授权的接口
+	protected := api.Group("/")
+	protected.Use(middleware.APIKeyAuthMiddleware())
 	{
-		authorized.PATCH("/videos/:id/review", updateVideoReviewStatus)
-		authorized.DELETE("/videos/:id", deleteVideo)
-		authorized.DELETE("/authors/:id", deleteAuthor)
+		// 视频操作
+		protected.POST("/videos", service.CreateVideo)
+		protected.PUT("/videos/:id", service.UpdateVideo)
+		protected.DELETE("/videos/:id", service.DeleteVideo)
+		protected.PATCH("/videos/:id/review", service.UpdateVideoReviewStatus)
 
-		// 验证
-		authorized.GET("/authorization", func(c *gin.Context) {
+		// 作者操作
+		protected.POST("/authors", service.CreateAuthor)
+		protected.PUT("/authors/:id", service.UpdateAuthor)
+		protected.DELETE("/authors/:id", service.DeleteAuthor)
+
+		// 标签操作
+		protected.POST("/tags", service.CreateTag)
+		protected.PUT("/tags/:id", service.UpdateTag)
+		protected.DELETE("/tags/:id", service.DeleteTag)
+
+		// 验证接口
+		protected.GET("/authorization", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"message": "验证通过"})
 		})
 	}
@@ -92,5 +120,7 @@ func main() {
 		c.File("./frontend/dist/index.html")
 	})
 
-	r.Run("0.0.0.0:9000")
+	log.Info().Msg("运行在: " + addr)
+
+	r.Run(addr)
 }

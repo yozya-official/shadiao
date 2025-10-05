@@ -14,7 +14,7 @@ export const useFilterStore = defineStore('filter', () => {
     hasSystem: null,
   })
 
-  const sortBy = useStorage<'name' | 'author' | 'created'>('filter-name', 'name')
+  const sortBy = useStorage<'name' | 'author' | 'created' | 'ctime'>('filter-name', 'name')
   const sortOrder = useStorage<'asc' | 'desc'>('filter-order', 'asc')
   const showFilter = useStorage<boolean>('filter-showFilter', true)
   const currentPage = useStorage<number>('filter-currentPage', 1)

@@ -27,3 +27,7 @@ html {
     @apply border-border;
   }
 }
+
+@utility container {
+  @apply max-w-6xl mx-auto;
+}

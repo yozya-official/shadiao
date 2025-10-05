@@ -1,6 +1,7 @@
 {
   "globals": {
-    "AuthorData": true,
+    "Author": true,
+    "Category": true,
     "Component": true,
     "ComponentPublicInstance": true,
     "ComputedRef": true,
@@ -18,7 +19,9 @@
     "ShallowRef": true,
     "Slot": true,
     "Slots": true,
+    "Tag": true,
     "VNode": true,
+    "Video": true,
     "VideoData": true,
     "VideoNewData": true,
     "WritableComputedRef": true,
@@ -128,6 +131,7 @@
     "styleOptions": true,
     "syncRef": true,
     "syncRefs": true,
+    "tagApi": true,
     "templateRef": true,
     "throttledRef": true,
     "throttledWatch": true,

@@ -8,6 +8,9 @@ import VideoUpdate from '@/views/VideoUpdate.vue'
 import AuthorsView from '@/views/AuthorsView.vue'
 import AuthorView from '@/views/AuthorView.vue'
 
+import TagsView from '@/views/TagsView.vue'
+import TagView from '@/views/TagView.vue'
+
 import CommunicateView from '@/views/CommunicateView.vue'
 
 const router = createRouter({
@@ -33,6 +36,16 @@ const router = createRouter({
       path: '/videos/review',
       name: 'videos-review',
       component: ReviewedView,
+    },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: TagsView,
+    },
+    {
+      path: '/tags/:tagId',
+      name: 'tag',
+      component: TagView,
     },
     {
       path: '/authors/:authorId',

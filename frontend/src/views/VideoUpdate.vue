@@ -9,7 +9,7 @@
       </svg>
     </template>
   </PageHeader>
-  <div class="container mx-auto px-6 py-8 max-w-6xl relative">
+  <div class="container px-6 py-8 relative">
     <!-- 主内容区域 -->
     <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
       <!-- 表单区域 -->
@@ -482,11 +482,6 @@ const router = useRouter()
 const formData = reactive<VideoData>({
   title: '',
   aid: 0,
-  author: {
-    uid: 0,
-    name: '',
-    avatar: '',
-  },
   url: '',
   cover: '',
   duration: 0,
@@ -498,6 +493,7 @@ const formData = reactive<VideoData>({
   background: '',
   style: [],
   hasSystem: false,
+  ctime: '',
 })
 
 // 加载视频数据

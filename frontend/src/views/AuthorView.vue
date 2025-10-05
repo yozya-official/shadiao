@@ -9,7 +9,7 @@
       </svg>
     </template>
   </PageHeader>
-  <div class="container mx-auto px-6 py-8 max-w-6xl relative">
+  <div class="container px-6 py-8 relative">
     <!-- 作者信息卡片 -->
     <div
       class="bg-card border border-border rounded-3xl shadow-lg p-8 mb-8 hover:shadow-xl transition-all duration-300"
@@ -90,10 +90,11 @@
 const route = useRoute()
 const authorId = ref('')
 
-const author = ref<AuthorData>({
+const author = ref<Author>({
   name: '',
   avatar: '',
   uid: 0,
+  id: 0,
 })
 
 watch(
@@ -105,8 +106,10 @@ watch(
 
     try {
       const res = await authorApi.getAuthorById(id)
-      author.value = res.data
+      author.value = res.data.author
       authorId.value = id
+      author.value.videos = author.value.videos?.map((v: Partial<Video>) => new Video(v))
+      console.log(author.value)
     } catch (err) {
       console.error('加载作者信息失败', err)
     }
@@ -114,19 +117,3 @@ watch(
   { immediate: true },
 )
 </script>
-
-<style scoped>
-/* 卡片阴影动画 */
-.bg-card:hover {
-  transform: translateY(-2px);
-}
-
-a {
-  color: var(--primary);
-}
-
-a:hover {
-  color: var(--primary);
-  opacity: 0.8;
-}
-</style>

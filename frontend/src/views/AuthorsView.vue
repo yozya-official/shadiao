@@ -10,7 +10,7 @@
     </template>
   </PageHeader>
 
-  <div class="container mx-auto px-6 py-8 max-w-6xl relative">
+  <div class="container px-6 py-8 max-w-6xl relative">
     <!-- 作者卡片网格 -->
     <div
       v-if="authors.length > 0"
@@ -23,7 +23,7 @@
       >
         <div class="p-6 text-center">
           <!-- 头像 -->
-          <div class="mb-4 cursor-pointer" @click="goToBiliSpace(author.uid)">
+          <div class="mb-4 cursor-pointer" @click="goToAuthor(author.id)">
             <div
               class="w-20 h-20 relative mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/20 p-1 group-hover:from-primary/40 group-hover:to-chart-2/40 transition-all duration-300"
             >
@@ -78,7 +78,7 @@
               删除作者
             </button>
             <button
-              @click="goToAuthor(author.id)"
+              @click="goToBiliSpace(author.uid)"
               class="btn btn-sm btn-primary rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-md"
             >
               作者主页
@@ -190,8 +190,8 @@ import { toast } from '@yuelioi/toast'
 
 const { isLogin } = useAuthStore()
 
-const authors = ref<AuthorData[]>([])
-const selectedAuthor = ref<AuthorData | null>(null)
+const authors = ref<Author[]>([])
+const selectedAuthor = ref<Author | null>(null)
 const currentPage = ref(1)
 const pageSize = 12
 
@@ -207,13 +207,13 @@ const pagedAuthors = computed(() => {
 const loadAuthors = async () => {
   try {
     const resp = await authorApi.getAllAuthors()
-    authors.value = resp.data
+    authors.value = resp.data.authors
   } catch (err) {
     handleApiError(err, '获取作者')
   }
 }
 
-const delAuthorConfirm = (author: AuthorData) => {
+const delAuthorConfirm = (author: Author) => {
   selectedAuthor.value = author
 }
 
@@ -247,39 +247,3 @@ onMounted(() => {
   loadAuthors()
 })
 </script>
-
-<style scoped>
-/* 卡片悬停效果 */
-.group:hover {
-  transform: translateY(-8px);
-}
-
-/* 模态框动画 */
-.fixed.inset-0 {
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.relative.bg-card {
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-</style>
