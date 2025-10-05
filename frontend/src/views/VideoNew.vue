@@ -408,12 +408,9 @@
                   class="w-full select input input-primary"
                 >
                   <option value="">选择背景设定...</option>
-                  <option
-                    v-for="(icon, background) in backgroundOptions"
-                    :key="background"
-                    :value="background"
-                  >
-                    {{ icon }} {{ background }}
+
+                  <option v-for="tag in backgroundOptions" :key="tag.id" :value="tag.name">
+                    {{ tag.icon }} {{ tag.displayName || tag.name }}
                   </option>
                 </select>
               </div>
@@ -432,8 +429,8 @@
                 </label>
                 <select v-model="formData.video.world" class="w-full select input input-primary">
                   <option value="">选择世界设定...</option>
-                  <option v-for="(icon, option) in worldOptions" :key="option" :value="option">
-                    {{ icon }} {{ option }}
+                  <option v-for="tag in worldOptions" :key="tag.id" :value="tag.name">
+                    {{ tag.icon }} {{ tag.displayName || tag.name }}
                   </option>
                 </select>
               </div>
@@ -454,19 +451,21 @@
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               <label
-                v-for="(icon, style) in styleOptions"
-                :key="style"
+                v-for="tag in styleOptions"
+                :key="tag.id"
                 class="group cursor-pointer bg-muted/20 hover:bg-muted/40 rounded-xl p-2 border transition-all duration-200 flex items-center justify-between"
-                :class="formData.video.style.includes(style) ? 'border-primary bg-primary/10' : ''"
+                :class="
+                  formData.video.style.includes(tag.name) ? 'border-primary bg-primary/10' : ''
+                "
               >
                 <div class="flex items-center space-x-3">
-                  <span class="">{{ icon }}</span>
-                  <span class="font-medium">{{ style }}</span>
+                  <span class="">{{ tag.icon }}</span>
+                  <span class="font-medium">{{ tag.displayName || tag.name }}</span>
                 </div>
                 <input
                   v-model="formData.video.style"
                   type="checkbox"
-                  :value="style"
+                  :value="tag.name"
                   class="w-4 h-4 text-primary border-2 rounded focus:ring-2 focus:ring-primary/50 transition-all duration-200"
                 />
               </label>
@@ -615,13 +614,11 @@
 <script setup lang="ts">
 import { toast } from '@yuelioi/toast'
 
-import {
-  backgroundOptions,
-  styleOptions,
-  durationOptions,
-  viewsOptions,
-  worldOptions,
-} from '@/stores/options'
+const videoStore = useVideoStore()
+const { backgroundOptions, styleOptions, worldOptions } = storeToRefs(videoStore)
+const { loadTags } = videoStore
+
+import { durationOptions, viewsOptions } from '@/stores/options'
 
 const formData = reactive<VideoNewData>({
   author: {
@@ -712,4 +709,8 @@ const handleReset = () => {
     avatar: '',
   })
 }
+
+onMounted(async () => {
+  await loadTags()
+})
 </script>

@@ -114,12 +114,13 @@ export interface VideoData {
   duration: number
   description: string
   views: number
-  isOriginal: boolean
-  isCompleted: boolean
-  world: string
-  background: string
+
+  isOriginal: boolean | null
+  isCompleted: boolean | null
+  world: string | undefined
+  background: string | undefined
   style: string[]
-  hasSystem: boolean
+  hasSystem: boolean | null
   ctime: string
 }
 

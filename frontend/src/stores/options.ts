@@ -1,4 +1,4 @@
-export const backgroundOptions: Record<string, string> = {
+export const backgroundOptions1: Record<string, string> = {
   古代: '🏛️',
   近代: '📻',
   现代: '🏢',
@@ -6,7 +6,7 @@ export const backgroundOptions: Record<string, string> = {
   异世界: '🌌',
 }
 
-export const styleOptions: Record<string, string> = {
+export const styleOptions1: Record<string, string> = {
   搞笑: '🤪',
   智斗: '🧠',
   悬疑: '🕵️',
@@ -23,7 +23,7 @@ export const styleOptions: Record<string, string> = {
   其他: '❓',
 }
 
-export const worldOptions: Record<string, string> = {
+export const worldOptions1: Record<string, string> = {
   修仙: '⚔️',
   怪谈: '🕯️',
   历史: '🏺',

@@ -29,7 +29,7 @@
     "asyncComputed": true,
     "authorApi": true,
     "autoResetRef": true,
-    "backgroundOptions": true,
+    "backgroundOptions1": true,
     "computed": true,
     "computedAsync": true,
     "computedEager": true,
@@ -128,7 +128,7 @@
     "shallowReadonly": true,
     "shallowRef": true,
     "storeToRefs": true,
-    "styleOptions": true,
+    "styleOptions1": true,
     "syncRef": true,
     "syncRefs": true,
     "tagApi": true,
@@ -339,6 +339,6 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "worldOptions": true
+    "worldOptions1": true
   }
 }

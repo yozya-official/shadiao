@@ -4,10 +4,10 @@
     <div
       v-for="video in videos"
       :key="video.id"
-      class="group relative card overflow-hidden card-hover cursor-pointer"
+      class="group relative card overflow-hidden card-hover"
     >
       <!-- 封面图片 -->
-      <div class="relative overflow-hidden">
+      <div class="relative overflow-hidden cursor-pointer">
         <img
           :src="video.cover"
           referrerpolicy="no-referrer"
@@ -74,7 +74,7 @@
         </h3>
 
         <!-- 作者和日期 -->
-        <div class="flex items-center justify-between text-sm">
+        <div class="flex items-center justify-between text-sm cursor-pointer">
           <div
             v-if="showAuthor"
             @click="router.push({ name: 'author', params: { authorId: video.author?.id } })"
@@ -123,8 +123,15 @@
             </svg>
             完结
           </span>
+
           <span
-            v-if="video.hasSystem()"
+            v-if="video.background()"
+            class="inline-flex items-center px-2.5 py-1 bg-accent/60 text-accent-foreground text-xs rounded-md font-medium"
+          >
+            {{ video.background()?.icon }} {{ video.background()?.name }}
+          </span>
+          <span
+            v-if="video.hasSystem() && tagCount(video) < 3"
             class="inline-flex items-center px-2.5 py-1 bg-chart-3/10 text-chart-3 text-xs rounded-md font-medium border border-chart-3/20"
           >
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -136,23 +143,17 @@
             </svg>
             系统
           </span>
-          <span
-            v-if="video.background()"
-            class="inline-flex items-center px-2.5 py-1 bg-accent/60 text-accent-foreground text-xs rounded-md font-medium"
-          >
-            {{ backgroundOptions[video.background()?.name || ''] }} {{ video.background()?.name }}
-            {{}}
-          </span>
         </div>
 
         <!-- 风格标签 -->
         <div v-if="video.style().length > 0" class="flex flex-wrap gap-1.5">
           <span
+            @click="router.push({ name: 'tag', params: { tagId: s.id } })"
             v-for="s in video.style().slice(0, 3)"
             :key="s.id"
-            class="px-2 py-0.5 bg-muted/40 text-muted-foreground text-xs rounded border border-border/50"
+            class="cursor-pointer px-2 py-0.5 bg-muted/40 text-muted-foreground text-xs rounded border border-border/50"
           >
-            {{ styleOptions[s.name] }} {{ s.name }}
+            {{ s.icon }} {{ s.name }}
           </span>
           <span
             v-if="video.style.length > 3"
@@ -164,8 +165,6 @@
       </div>
     </div>
   </div>
-
-  <!-- 分页控制 -->
 
   <!-- 视频详情模态框 -->
   <Transition
@@ -308,20 +307,7 @@
                 </svg>
                 已完结
               </span>
-              <span
-                v-if="selectedVideo.background()"
-                class="inline-flex items-center px-3 py-2 bg-accent/60 text-accent-foreground rounded-lg font-medium"
-              >
-                {{ backgroundOptions[selectedVideo.background()?.name || ''] }}
-                {{ selectedVideo.background()?.name }}
-              </span>
-              <span
-                v-for="s in selectedVideo.style()"
-                :key="s.id"
-                class="inline-flex items-center px-3 py-2 bg-muted/60 text-muted-foreground rounded-lg font-medium border border-border"
-              >
-                {{ styleOptions[s.name] }} {{ s.name }}
-              </span>
+
               <span
                 v-if="selectedVideo.hasSystem()"
                 class="inline-flex items-center px-3 py-2 bg-chart-3/10 text-chart-3 rounded-lg font-medium border border-chart-3/20"
@@ -334,6 +320,22 @@
                   ></path>
                 </svg>
                 系统外挂
+              </span>
+
+              <span
+                v-if="selectedVideo.background()"
+                class="inline-flex items-center px-3 py-2 bg-accent/60 text-accent-foreground rounded-lg font-medium"
+              >
+                {{ selectedVideo.background()?.icon }}
+                {{ selectedVideo.background()?.name }}
+              </span>
+              <span
+                v-for="s in selectedVideo.style()"
+                @click="router.push({ name: 'tag', params: { tagId: s.id } })"
+                :key="s.id"
+                class="inline-flex items-center px-3 py-2 bg-muted/60 text-muted-foreground rounded-lg font-medium border border-border"
+              >
+                {{ s.icon }} {{ s.name }}
               </span>
             </div>
           </div>
@@ -431,7 +433,7 @@
 
 <script setup lang="ts">
 import { videoApi } from '@/api'
-import { backgroundOptions, styleOptions } from '@/stores/options'
+const videoStore = useVideoStore()
 import { formatDate, handleApiError } from '@/utils'
 import { toast } from '@yuelioi/toast'
 import { ref } from 'vue'
@@ -445,7 +447,6 @@ const authStore = useAuthStore()
 const { isLogin } = authStore
 
 import { useVideoStore } from '@/stores/videoStore'
-const videoStore = useVideoStore()
 
 const selectedVideo = ref<Video | null>(null)
 const showVideoModal = ref(false)
@@ -460,6 +461,14 @@ const goToAuthor = (id?: number) => {
   if (!id) return
   closeVideoModal()
   router.push({ name: 'author', params: { authorId: id } })
+}
+
+const tagCount = (video: Video) => {
+  let count = 0
+  if (video.isOriginal()) count++
+  if (video.isCompleted()) count++
+  if (video.background()) count++
+  return count
 }
 
 const goToEdit = () => {

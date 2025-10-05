@@ -279,12 +279,6 @@ func UpdateVideo(c *gin.Context) {
 	if input.Title != "" {
 		video.Title = input.Title
 	}
-	if input.AID != 0 {
-		video.AID = input.AID
-	}
-	if input.URL != "" {
-		video.URL = input.URL
-	}
 	if input.Cover != "" {
 		video.Cover = input.Cover
 	}

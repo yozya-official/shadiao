@@ -98,12 +98,8 @@
           </label>
           <select id="background" v-model="filters.background" class="w-full select select-primary">
             <option value="">全部背景</option>
-            <option
-              v-for="(icon, background) in backgroundOptions"
-              :key="background"
-              :value="background"
-            >
-              {{ icon }} {{ background }}
+            <option v-for="tag in backgroundOptions" :key="tag.id" :value="tag.name">
+              {{ tag.icon }} {{ tag.displayName || tag.name }}
             </option>
           </select>
         </div>
@@ -122,8 +118,9 @@
           </label>
           <select id="world" v-model="filters.world" class="w-full select select-primary">
             <option value="">全部世界</option>
-            <option v-for="(icon, world) in worldOptions" :key="world" :value="world">
-              {{ icon }} {{ world }}
+
+            <option v-for="tag in worldOptions" :key="tag.id" :value="tag.name">
+              {{ tag.icon }} {{ tag.displayName || tag.name }}
             </option>
           </select>
         </div>
@@ -142,8 +139,9 @@
           </label>
           <select id="style" v-model="filters.style" class="w-full select select-primary">
             <option value="">全部风格</option>
-            <option v-for="(icon, style) in styleOptions" :key="style" :value="style">
-              {{ icon }} {{ style }}
+
+            <option v-for="tag in styleOptions" :key="tag.id" :value="tag.name">
+              {{ tag.icon }} {{ tag.displayName || tag.name }}
             </option>
           </select>
         </div>
@@ -365,11 +363,11 @@
 
 <script setup lang="ts">
 import VideoContainer from '@/components/VideoContainer.vue'
-import { backgroundOptions, styleOptions, worldOptions } from '@/stores/options'
 
 const videoStore = useVideoStore()
 const filterStore = useFilterStore()
 const { videos } = storeToRefs(videoStore)
+const { backgroundOptions, styleOptions, worldOptions } = storeToRefs(videoStore)
 const { filters, showFilter, sortBy, sortOrder, currentPage } = storeToRefs(filterStore)
 const { resetFilters } = filterStore
 const videoContainerRef = ref<InstanceType<typeof VideoContainer> | null>(null)
@@ -473,6 +471,7 @@ const pagedVideos = computed(() => {
 
 onMounted(async () => {
   await videoStore.loadVideos()
+  await videoStore.loadTags()
 })
 </script>
 

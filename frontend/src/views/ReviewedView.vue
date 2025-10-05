@@ -191,12 +191,10 @@
                     </svg>
                     <span class="font-medium truncate">
                       {{
-                        backgroundOptions[video.background()?.name || ''] ||
-                        video.background()?.name ||
-                        '未知'
+                        video.background()?.displayName || '' || video.background()?.name || '未知'
                       }}
                       /
-                      {{ worldOptions[video.world()?.name || ''] || video.world()?.name || '未知' }}
+                      {{ video.world()?.displayName || video.world()?.name || '未知' }}
                     </span>
                   </div>
                 </div>
@@ -214,11 +212,7 @@
                       </svg>
                       <span class="text-muted-foreground">背景:</span>
                       <span class="font-medium">
-                        {{
-                          backgroundOptions[video.background()?.name || ''] ||
-                          video.background()?.name ||
-                          ''
-                        }}
+                        {{ video.background()?.displayName || video.background()?.name || '' }}
                       </span>
                     </div>
                     <div class="flex items-center space-x-2">
@@ -231,7 +225,7 @@
                       </svg>
                       <span class="text-muted-foreground">世界:</span>
                       <span class="font-medium">
-                        {{ worldOptions[video.world()?.name || ''] || video.world()?.name || '' }}
+                        {{ video.world()?.displayName || video.world()?.name || '' }}
                       </span>
                     </div>
                   </div>
@@ -257,11 +251,11 @@
               <div v-if="video.style.length > 0" class="flex flex-wrap gap-1.5 md:gap-2">
                 <span class="text-muted-foreground text-xs md:text-sm">风格:</span>
                 <span
-                  v-for="(s, i) in video.style"
+                  v-for="(s, i) in video.style()"
                   :key="i"
                   class="inline-flex items-center px-1.5 py-0.5 md:px-2 md:py-1 bg-accent/20 text-accent-foreground text-xs rounded-md font-medium"
                 >
-                  {{ styleOptions[s] || s }}
+                  {{ s.displayName || s.name }}
                 </span>
               </div>
 
@@ -375,7 +369,6 @@
 </template>
 
 <script setup lang="ts">
-import { backgroundOptions, styleOptions, worldOptions } from '@/stores/options'
 import { toast } from '@yuelioi/toast'
 
 const route = useRoute()

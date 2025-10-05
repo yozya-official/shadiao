@@ -13,6 +13,7 @@ declare global {
   const authorApi: typeof import('./api/index')['authorApi']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const backgroundOptions: typeof import('./stores/options')['backgroundOptions']
+  const backgroundOptions1: typeof import('./stores/options')['backgroundOptions1']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -112,6 +113,7 @@ declare global {
   const shallowRef: typeof import('vue')['shallowRef']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const styleOptions: typeof import('./stores/options')['styleOptions']
+  const styleOptions1: typeof import('./stores/options')['styleOptions1']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
   const tagApi: typeof import('./api/index')['tagApi']
@@ -326,6 +328,7 @@ declare global {
   const watchWithFilter: typeof import('@vueuse/core')['watchWithFilter']
   const whenever: typeof import('@vueuse/core')['whenever']
   const worldOptions: typeof import('./stores/options')['worldOptions']
+  const worldOptions1: typeof import('./stores/options')['worldOptions1']
 }
 // for type re-export
 declare global {

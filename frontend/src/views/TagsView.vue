@@ -51,18 +51,20 @@
     </div>
 
     <!-- 标签卡片网格 -->
+    <!-- 标签卡片网格 -->
     <div
       v-if="tags.length > 0"
-      class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 mb-8"
+      class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mb-8"
     >
-      <div v-for="tag in pagedTags" :key="tag.id" class="group card card-hover">
-        <div class="p-3">
-          <!-- 标签图标和类型 -->
-          <div class="flex items-start justify-between mb-3">
+      <div v-for="tag in pagedTags" :key="tag.id" class="group card card-hover overflow-hidden">
+        <div class="p-3 relative">
+          <!-- 头部：图标、标题、类型 -->
+          <div class="flex items-start gap-2 mb-2">
             <div
-              class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-chart-2/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+              class="size-10 rounded-lg bg-gradient-to-br from-primary/20 to-chart-2/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300"
             >
-              <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+              <span v-if="tag.icon" class="text-base">{{ tag.icon }}</span>
+              <svg v-else class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fill-rule="evenodd"
                   d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
@@ -70,38 +72,43 @@
                 ></path>
               </svg>
             </div>
-            <span
-              class="px-2 py-0.5 rounded-md badge-secondary text-xs font-medium text-muted-foreground"
+            <div class="flex-1 min-w-0">
+              <h2
+                class="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-1"
+              >
+                {{ tag.displayName || tag.name }}
+              </h2>
+              <span class="text-xs text-muted-foreground">
+                {{ tag.videos?.length || 0 }} 个视频
+              </span>
+            </div>
+            <div
+              class="absolute right-2 top-2 px-1.5 py-0.5 rounded badge-secondary text-xs font-medium text-muted-foreground flex-shrink-0"
             >
               {{ tag.typeDisplayName || tag.type }}
-            </span>
+            </div>
           </div>
 
-          <!-- 标签信息 -->
-          <h2
-            class="text-base font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-200 line-clamp-1"
-          >
-            {{ tag.displayName || tag.name }}
-          </h2>
-
-          <p class="text-xs text-muted-foreground mb-3 line-clamp-2 min-h-[2rem]">
+          <!-- 描述 -->
+          <p class="text-xs text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
             {{ tag.description || '暂无描述' }}
           </p>
 
           <!-- 操作按钮 -->
-          <div class="flex gap-1.5">
+          <div class="flex gap-1">
             <button
               @click="goToTag(tag.id)"
-              class="flex-1 btn btn-sm btn-primary rounded-lg text-xs font-medium transition-all duration-200 hover:shadow-md py-1.5"
+              class="flex-1 btn btn-sm btn-primary rounded text-xs font-medium transition-all duration-200 hover:shadow-md py-1"
             >
               详情
             </button>
             <button
               v-if="isLogin"
               @click="openEditModal(tag)"
-              class="btn btn-sm btn-ghost rounded-lg transition-all duration-200 hover:bg-accent p-1.5"
+              class="btn btn-sm btn-ghost rounded transition-all duration-200 hover:bg-accent px-2 py-1"
+              title="编辑"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -113,9 +120,10 @@
             <button
               v-if="isLogin"
               @click="delTagConfirm(tag)"
-              class="btn btn-sm btn-ghost text-destructive rounded-lg transition-all duration-200 hover:bg-destructive/10 p-1.5"
+              class="btn btn-sm btn-ghost text-destructive rounded transition-all duration-200 hover:bg-destructive/10 px-2 py-1"
+              title="删除"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"

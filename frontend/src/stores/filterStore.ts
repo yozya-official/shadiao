@@ -14,8 +14,8 @@ export const useFilterStore = defineStore('filter', () => {
     hasSystem: null,
   })
 
-  const sortBy = useStorage<'name' | 'author' | 'created' | 'ctime'>('filter-name', 'name')
-  const sortOrder = useStorage<'asc' | 'desc'>('filter-order', 'asc')
+  const sortBy = useStorage<'name' | 'author' | 'created' | 'ctime'>('filter-name', 'ctime')
+  const sortOrder = useStorage<'asc' | 'desc'>('filter-order', 'desc')
   const showFilter = useStorage<boolean>('filter-showFilter', true)
   const currentPage = useStorage<number>('filter-currentPage', 1)
 
@@ -24,7 +24,7 @@ export const useFilterStore = defineStore('filter', () => {
   }
 
   const toggleSortOrder = () => {
-    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'desc'
   }
 
   const resetFilters = () => {
