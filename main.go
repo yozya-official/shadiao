@@ -1,25 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"io"
-	"net/http"
 	"os"
 	"shadiao/conf"
 	"shadiao/db"
-	"shadiao/middleware"
 	"shadiao/service"
-	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+
+	"github.com/Yuelioi/gkit/logx/zero"
+	"github.com/Yuelioi/gkit/web/gin/middleware/apikey"
+	"github.com/Yuelioi/gkit/web/gin/middleware/log/gzero"
+	"github.com/Yuelioi/gkit/web/gin/middleware/ratelimit"
+	"github.com/Yuelioi/gkit/web/gin/server"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	// 配置日志
-	logger := initLog()
+	logger := zero.Default()
 	log.Logger = logger
 
+	// 初始化数据库
 	if envPath := os.Getenv("DATABASE_URL"); envPath != "" {
 		conf.DbPath = envPath
 	}
@@ -31,96 +33,68 @@ func main() {
 		MaxLifetime:  10,
 	})
 
-	// 生成随机密钥
-	key := conf.InitAPIKey()
-	fmt.Println("生成的密钥为: ", key)
+	// 初始化 API Key
+	_ = conf.InitAPIKey()
 
-	// 初始化Gin
-	gin.DefaultWriter = io.Discard
-	gin.DefaultErrorWriter = io.Discard
-	r := gin.New()
-	r.Use(middleware.GinLogger(logger), middleware.GinRecovery(logger))
+	// gin.DefaultWriter = io.Discard
+	// gin.DefaultErrorWriter = io.Discard
 
-	mode := strings.ToLower(os.Getenv("APP_MODE"))
-
-	// 基于部署方式动态修改参数
-	addr := ":9000"
-	if mode == "release" {
-		gin.SetMode(gin.ReleaseMode)
-	} else {
-		// 全局使用
-		addr = "0.0.0.0" + addr
-		// CORS 中间件
-		r.Use(middleware.Cors())
+	// 服务器配置
+	cfg := server.ServerConfig{
+		Addr:      ":9000",
+		Logger:    logger,
+		Mode:      os.Getenv("APP_MODE"),
+		APIPrefix: "/api/v1",
+		Middlewares: []gin.HandlerFunc{
+			gzero.Default(logger),
+			gzero.GinRecovery(logger),
+			ratelimit.Default(),
+		},
+		EnableCORS: true,
+		SPAPath:    "./frontend/dist",
 	}
 
-	// API 路由组 - 必须在静态文件之前定义
-	api := r.Group("/api/v1")
+	// 启动服务器
+	err := server.Start(cfg, func(api *gin.RouterGroup) {
+		// 公共接口
+		public := api.Group("/")
+		{
+			public.GET("/videos", service.GetAllVideos)
+			public.POST("/videos", service.CreateVideo)
+			public.GET("/videos/unreviewed", service.GetUnreviewedVideos)
+			public.GET("/video/parse", service.ParseVideoURL)
+			public.GET("/videos/:id", service.GetVideoByID)
 
-	// 公共查询接口
-	public := api.Group("/")
-	{
-		// 视频查询
-		public.GET("/videos", service.GetAllVideos)
-		public.POST("/videos", service.CreateVideo)
-		public.GET("/videos/unreviewed", service.GetUnreviewedVideos)
-		public.GET("/video/parse", service.ParseVideoURL)
-		public.GET("/videos/:id", service.GetVideoByID)
+			public.GET("/authors", service.GetAllAuthors)
+			public.GET("/authors/:id", service.GetAuthorByID)
 
-		// 作者查询
-		public.GET("/authors", service.GetAllAuthors)
-		public.GET("/authors/:id", service.GetAuthorByID)
-
-		// 标签查询
-		public.GET("/tags", service.GetAllTags)
-		public.GET("/tags/:id", service.GetTagByID)
-		public.GET("/tags/:id/videos", service.GetTagVideos)
-	}
-
-	// 需要授权的接口
-	protected := api.Group("/")
-	protected.Use(middleware.APIKeyAuthMiddleware())
-	{
-		// 视频操作
-		protected.PUT("/videos/:id", service.UpdateVideo)
-		protected.DELETE("/videos/:id", service.DeleteVideo)
-		protected.PATCH("/videos/:id/review", service.UpdateVideoReviewStatus)
-
-		// 作者操作
-		protected.POST("/authors", service.CreateAuthor)
-		protected.PUT("/authors/:id", service.UpdateAuthor)
-		protected.DELETE("/authors/:id", service.DeleteAuthor)
-
-		// 标签操作
-		protected.POST("/tags", service.CreateTag)
-		protected.PUT("/tags/:id", service.UpdateTag)
-		protected.DELETE("/tags/:id", service.DeleteTag)
-
-		// 验证接口
-		protected.GET("/authorization", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"message": "验证通过"})
-		})
-	}
-
-	// 静态资源路由
-	r.Static("/assets", "./frontend/dist/assets")
-	r.StaticFile("/favicon.svg", "./frontend/dist/favicon.svg")
-	r.StaticFile("/logo.png", "./frontend/dist/logo.png")
-
-	// 处理 Vue SPA 的所有其他路由 - 返回 index.html
-	r.NoRoute(func(c *gin.Context) {
-		// 排除 API 路由，避免返回 HTML 给 API 请求
-		path := c.Request.URL.Path
-		if len(path) >= 4 && path[:4] == "/api" {
-			c.JSON(http.StatusNotFound, gin.H{"error": "API route not found"})
-			return
+			public.GET("/tags", service.GetAllTags)
+			public.GET("/tags/:id", service.GetTagByID)
+			public.GET("/tags/:id/videos", service.GetTagVideos)
 		}
 
-		// 其他所有路由返回 index.html，让 Vue Router 处理
-		c.File("./frontend/dist/index.html")
+		// 需要授权的接口
+		protected := api.Group("/")
+		protected.Use(apikey.Default(conf.IsValidAPIKey))
+		{
+			// 视频操作
+			protected.PUT("/videos/:id", service.UpdateVideo)
+			protected.DELETE("/videos/:id", service.DeleteVideo)
+			protected.PATCH("/videos/:id/review", service.UpdateVideoReviewStatus)
+
+			// 作者操作
+			protected.POST("/authors", service.CreateAuthor)
+			protected.PUT("/authors/:id", service.UpdateAuthor)
+			protected.DELETE("/authors/:id", service.DeleteAuthor)
+
+			// 标签操作
+			protected.POST("/tags", service.CreateTag)
+			protected.PUT("/tags/:id", service.UpdateTag)
+			protected.DELETE("/tags/:id", service.DeleteTag)
+		}
 	})
 
-	log.Info().Msg("运行在: " + addr)
-
-	r.Run(addr)
+	if err != nil {
+		logger.Fatal().Err(err).Msg("服务启动失败")
+	}
 }

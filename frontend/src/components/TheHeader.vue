@@ -234,7 +234,7 @@ const navigationItems = ref([
 const route = useRoute()
 
 const navigateTo = (path: string) => {
-  mobileMenuOpen.value = false
+  closeMobileMenu()
   router.push(path)
 }
 
