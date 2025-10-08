@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"os"
 	"shadiao/conf"
 	"shadiao/db"
@@ -34,10 +35,10 @@ func main() {
 	})
 
 	// 初始化 API Key
-	_ = conf.InitAPIKey()
+	key := conf.InitAPIKey()
 
-	// gin.DefaultWriter = io.Discard
-	// gin.DefaultErrorWriter = io.Discard
+	gin.DefaultWriter = io.Discard
+	gin.DefaultErrorWriter = io.Discard
 
 	// 服务器配置
 	cfg := server.ServerConfig{
@@ -53,6 +54,8 @@ func main() {
 		EnableCORS: true,
 		SPAPath:    "./frontend/dist",
 	}
+
+	logger.Info().Msg("后台访问密码为:" + key)
 
 	// 启动服务器
 	err := server.Start(cfg, func(api *gin.RouterGroup) {

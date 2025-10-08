@@ -35,7 +35,6 @@ export const useVideoStore = defineStore('video', () => {
     try {
       const resp = await tagApi.getAllTags()
       tags.value = resp.data.tags
-      console.log(tags.value)
     } catch (err) {
       console.error(err)
     }

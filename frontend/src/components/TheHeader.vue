@@ -124,7 +124,7 @@
       <h3 class="text-lg font-bold pb-4">请输入密钥</h3>
       <div class="flex justify-between gap-3">
         <input type="text" v-model="apiKey" class="input input-primary" />
-        <button class="btn btn-primary" onclick="secret_setting.close()">确认</button>
+        <button class="btn btn-primary" @click="submitSecret">确认</button>
       </div>
     </div>
   </dialog>
@@ -277,6 +277,11 @@ function handleEscapeKey(e: KeyboardEvent) {
   if (e.key === 'Escape') {
     closeMobileMenu()
   }
+}
+
+function submitSecret() {
+  secretModal.value?.close()
+  location.reload()
 }
 
 // 滚动效果 - 添加阴影和背景模糊

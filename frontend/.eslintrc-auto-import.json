@@ -214,6 +214,7 @@
     "useFileDialog": true,
     "useFileSystemAccess": true,
     "useFilterStore": true,
+    "useFilteredPagination": true,
     "useFocus": true,
     "useFocusWithin": true,
     "useFps": true,

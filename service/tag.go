@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"shadiao/db"
 	"shadiao/models"
+	"sort"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
@@ -58,6 +59,10 @@ func GetAllTags(c *gin.Context) {
 		return
 	}
 
+	// 视频最多的放最前面
+	sort.Slice(tags, func(i, j int) bool {
+		return len(tags[i].Videos) > len(tags[j].Videos)
+	})
 	c.JSON(http.StatusOK, gin.H{"tags": tags})
 }
 

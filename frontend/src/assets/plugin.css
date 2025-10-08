@@ -1,0 +1,5 @@
+@reference '@yuelioi/yami/src/index.css';
+
+@source "../../node_modules/@yuelioi/ui/src/components/SearchInput.vue";
+@source "../../node_modules/@yuelioi/ui/src/components/PageActionHeader.vue";
+@source "../../node_modules/@yuelioi/ui/src/components/PageNavigator.vue";

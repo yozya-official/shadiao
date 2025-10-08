@@ -200,6 +200,7 @@ declare global {
   const useFileDialog: typeof import('@vueuse/core')['useFileDialog']
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
   const useFilterStore: typeof import('./stores/filterStore')['useFilterStore']
+  const useFilteredPagination: typeof import('./composables/useFilteredPagination')['useFilteredPagination']
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
   const useFps: typeof import('@vueuse/core')['useFps']

@@ -474,6 +474,7 @@ const tagCount = (video: Video) => {
 const goToEdit = () => {
   closeVideoModal()
   router.push({ name: 'videos-update', params: { id: selectedVideo.value?.id } })
+  location.reload()
 }
 
 const openVideo = (video: Video) => {
